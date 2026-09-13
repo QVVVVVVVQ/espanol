@@ -1,0 +1,213 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тренажёр — Español</title><link rel="stylesheet" href="styles.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<div class="shell">
+<header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="index.html">←</a><div class="appbar-title"><h1 id="topicTitle">Тема</h1><small id="topicEs"></small></div></div><div class="appbar-actions"><a class="iconbtn" href="pronunciation.html">🗣 Произношение</a><a class="iconbtn" id="settingsLink" href="settings.html">⚙ Настройки</a></div></header>
+<section class="topic-switcher" aria-label="Выбор темы">
+  <div class="topic-switcher-label"><b>Тема:</b><span>выбери, что изучаем</span></div>
+  <div class="topic-switch-buttons">
+    <a class="topic-switch" data-topic-link="colors" href="trainer.html?topic=colors">🎨 <span>Цвета</span></a>
+    <a class="topic-switch" data-topic-link="weekdays" href="trainer.html?topic=weekdays">📅 <span>Дни недели</span></a>
+    <a class="topic-switch" data-topic-link="months" href="trainer.html?topic=months">🗓️ <span>Месяцы</span></a>
+    <a class="topic-switch" data-topic-link="ser" href="trainer.html?topic=ser">🧑‍🏫 <span>SER</span></a>
+    <a class="topic-switch" data-topic-link="conversations" href="trainer.html?topic=conversations">💬 <span>Беседы</span></a>
+    <a class="topic-switch" data-topic-link="school" href="trainer.html?topic=school">🎒 <span>Школа</span></a>
+    <a class="topic-switch" data-topic-link="adjectives" href="trainer.html?topic=adjectives">🙂 <span>Прилагательные</span></a>
+  </div>
+</section>
+<nav class="modebar"><button class="mode-tab active" data-mode="study">🃏 Карточки</button><button class="mode-tab" data-mode="quiz">🎯 Тест</button><button class="mode-tab" data-mode="listen">🎧 На слух</button><button class="mode-tab" data-mode="dictation">✍️ Диктант</button><button class="mode-tab" data-mode="speed">⚡ 60 сек</button><button class="mode-tab" data-mode="match">🧩 Пары</button></nav>
+<main class="workspace"><div class="workspace-head"><div><h2 id="modeTitle"></h2><div class="subtle" id="modeSub"></div></div><div class="workspace-head-right"><div class="subtle" id="counter"></div><div class="workspace-actions" id="headActions"></div></div></div><div class="progress"><div id="progressBar"></div></div><div id="content"></div></main>
+</div><div id="toast" class="toast"></div>
+<script src="data.js"></script><script src="common.js"></script><script>
+const topic=TOPICS[getTopicId()]||TOPICS.colors;
+const content=document.querySelector('#content');
+let mode='study',current=null,round=0,speedTimer=null,speedTime=60,speedScore=0,matchFirst=null,matchLock=false,footerPronTarget='';
+const isSer=topic.id==='ser';
+
+/* Равномерная выдача заданий.
+   В каждом режиме все активные слова проходят полный перемешанный цикл
+   прежде, чем какое-либо слово сможет повториться. */
+const TEST_DECKS=Object.create(null);
+function deckSignature(words){return words.map(w=>w.es).slice().sort().join('\u241f')}
+function refillDeck(name,words){
+  const last=TEST_DECKS[name]?.last||'';
+  const queue=shuffle(words);
+  if(queue.length>1&&last&&queue[0].es===last){
+    const swapIndex=queue.findIndex((w,i)=>i>0&&w.es!==last);
+    if(swapIndex>0)[queue[0],queue[swapIndex]]=[queue[swapIndex],queue[0]];
+  }
+  TEST_DECKS[name]={signature:deckSignature(words),queue,last};
+  return TEST_DECKS[name];
+}
+function ensureDeck(name,words){
+  const signature=deckSignature(words);
+  let d=TEST_DECKS[name];
+  if(!d||d.signature!==signature)d=refillDeck(name,words);
+  return d;
+}
+function resetDeck(name,words){
+  delete TEST_DECKS[name];
+  if(words&&words.length)refillDeck(name,words);
+}
+function nextFairWord(name,words){
+  if(!words.length)return null;
+  let d=ensureDeck(name,words);
+  if(!d.queue.length)d=refillDeck(name,words);
+  const w=d.queue.shift();
+  d.last=w.es;
+  return w;
+}
+function takeFairBatch(name,words,count){
+  if(!words.length||count<=0)return [];
+  const target=Math.min(count,words.length),result=[];
+  while(result.length<target){
+    let d=ensureDeck(name,words);
+    if(!d.queue.length)d=refillDeck(name,words);
+    let attempts=d.queue.length,selected=null;
+    while(attempts-->0){
+      const candidate=d.queue.shift();
+      if(!result.some(w=>w.es===candidate.es)){selected=candidate;break}
+      d.queue.push(candidate);
+    }
+    if(!selected){
+      d=refillDeck(name,words);
+      continue;
+    }
+    result.push(selected);
+    d.last=selected.es;
+  }
+  return result;
+}
+document.title=topic.title+' — Español';
+document.querySelector('#topicTitle').textContent=topic.title;
+document.querySelector('#topicEs').textContent=topic.esTitle;
+document.querySelector('#settingsLink').href='settings.html?topic='+topic.id;
+document.querySelectorAll('[data-topic-link]').forEach(a=>a.classList.toggle('active',a.dataset.topicLink===topic.id));
+
+function meta(t,s,c='',p=0){
+  stopPronunciationCheck();footerPronTarget='';
+  document.querySelector('#modeTitle').textContent=t;document.querySelector('#modeSub').textContent=s;document.querySelector('#counter').textContent=c;
+  document.querySelector('#progressBar').style.width=Math.max(0,Math.min(100,p))+'%';document.querySelector('#headActions').innerHTML='';
+}
+function headActions(html){document.querySelector('#headActions').innerHTML=html||''}
+function active(){
+  const a=activeWords(topic);if(a.length)return a;
+  meta('Нет активных карточек','Включи материал в настройках','0 активно',0);
+  content.innerHTML=`<div class="empty"><div style="font-size:72px">${topic.icon}</div><h2>Тема выключена</h2><p class="subtle">Открой настройки и включи хотя бы одну карточку.</p><a class="ghostbtn" href="settings.html?topic=${topic.id}">⚙ Открыть настройки</a></div>`;return null;
+}
+function speechText(w){return isSer?`${w.pronoun} ${w.form}`:w.es}
+function looseAnswer(s){return (s||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zñü0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
+function mainEs(w){if(isSer)return `${w.pronoun} <span class="ser-form">${w.form}</span>`;return `${w.es}${w.hint?`<span class="pron-hint">${w.hint}</span>`:''}`}
+function exampleBlock(w,cls=''){
+  if(!isSer)return '';
+  return `<div class="examples ${cls}"><div class="examples-title">Примеры · нажми 🔊, чтобы послушать</div>
+    <div class="example"><div class="example-copy"><b>${w.exampleEs}</b><span>${w.exampleRu}</span></div><button class="example-speak" type="button" data-example="1" aria-label="Произнести первый пример">🔊</button></div>
+    <div class="example"><div class="example-copy"><b>${w.example2Es}</b><span>${w.example2Ru}</span></div><button class="example-speak" type="button" data-example="2" aria-label="Произнести второй пример">🔊</button></div></div>`;
+}
+function bindExampleButtons(w,root=document){if(!isSer)return;root.querySelectorAll('.example-speak').forEach(btn=>btn.onclick=()=>speak(btn.dataset.example==='2'?w.example2Es:w.exampleEs))}
+function visual(w,large=false){
+  if(topic.id==='colors')return `<div class="${large?'prompt-visual':'visual'}" style="background:${w.hex};color:${w.fg};${w.es==='blanco'?'box-shadow:inset 0 0 0 1px #ddd':''}">${large?'':`<span class="badge">${topic.icon}</span>`}</div>`;
+  if(isSer){if(large)return `<div class="prompt-visual grammar-prompt"><div class="grammar-pronoun">${w.pronoun}</div><div class="grammar-ru">${w.ru}</div></div>`;return `<div class="visual grammar-visual"><span class="badge">SER · presente</span><div class="grammar-pair"><span>${w.pronoun}</span><i>→</i><strong>${w.form}</strong></div></div>`}
+  return `<div class="${large?'prompt-visual':'visual'}">${large?`<strong>${w.symbol}</strong>`:`<span class="badge">${topic.icon}</span><div class="visual-big visual-word">${w.symbol}</div>`}</div>`;
+}
+function makeOptions(correct){const a=active()||[];let others=shuffle(a.filter(x=>x.es!==correct.es)).slice(0,3);if(others.length<3)others=others.concat(shuffle(topic.words.filter(x=>x.es!==correct.es&&!others.some(y=>y.es===x.es))).slice(0,3-others.length));return shuffle([correct,...others])}
+function optionLabel(w){return isSer?w.form:w.es}
+function feedbackText(w){return isSer?`${w.pronoun} ${w.form}`:`${w.es} — ${w.ru}`}
+function flashWrong(el){wrongSignal();if(el){el.classList.add('wrong');setTimeout(()=>el.classList.remove('wrong'),430)}}
+
+function voiceFooterHTML(showAuto=false,placeholder='Произнеси текущий испанский вариант и проверь себя.'){
+  return `<footer class="voice-footer">
+    <div class="voice-footer-title"><b>🔊 Голос и произношение</b><span>${placeholder}</span></div>
+    <div class="voice-settings-row">
+      <label class="voice-field"><span>Голос</span><select id="voiceSelect"></select></label>
+      <label class="voice-field rate-field"><span>Скорость <b id="rateLabel">${Number(STATE.settings.rate).toFixed(2)}×</b></span><input id="rate" type="range" min=".65" max="1.15" step=".05" value="${STATE.settings.rate}"></label>
+      ${showAuto?`<label class="voice-auto"><input id="auto" type="checkbox" ${STATE.settings.autoSpeak?'checked':''}> автоматически произносить карточку</label>`:''}
+    </div>
+    <div class="pron-check-row"><button class="pron-check-listen" id="footerListen">🔊 Послушать</button><button class="pron-check-mic" id="pronCheckMic">🎙 Проверить произношение</button></div>
+    <div class="pron-check-status" id="pronCheckStatus">${placeholder}</div><div class="pron-check-recognized" id="pronCheckRecognized"></div>
+  </footer>`;
+}
+function setVoiceFooterTarget(target,message){
+  stopPronunciationCheck();footerPronTarget=target||'';const mic=document.querySelector('#pronCheckMic'),listen=document.querySelector('#footerListen'),st=document.querySelector('#pronCheckStatus');
+  if(mic)mic.disabled=!footerPronTarget;if(listen)listen.disabled=!footerPronTarget;if(st&&message)st.textContent=message;
+}
+function bindVoiceFooter(target,opts={}){
+  footerPronTarget=target||'';
+  const vs=loadVoices(),sel=document.querySelector('#voiceSelect');
+  if(sel){if(vs.length){sel.innerHTML=vs.map((v,n)=>`<option value="${n}">${v.name} — ${v.lang}</option>`).join('');let ix=voice?vs.findIndex(v=>v.voiceURI===voice.voiceURI):-1;if(ix<0)ix=0;sel.value=ix;sel.onchange=()=>{voice=vs[+sel.value];STATE.settings.voiceURI=voice?.voiceURI||'';saveState();if(footerPronTarget)speak(footerPronTarget)}}else{sel.innerHTML='<option>Системный голос es-ES</option>';sel.disabled=true}}
+  const rate=document.querySelector('#rate');if(rate)rate.oninput=e=>{STATE.settings.rate=+e.target.value;const l=document.querySelector('#rateLabel');if(l)l.textContent=(+e.target.value).toFixed(2)+'×';saveState()};
+  const auto=document.querySelector('#auto');if(auto)auto.onchange=e=>{STATE.settings.autoSpeak=e.target.checked;saveState()};
+  const listen=document.querySelector('#footerListen'),mic=document.querySelector('#pronCheckMic');
+  if(listen){listen.disabled=!footerPronTarget;listen.onclick=()=>{if(footerPronTarget)speak(footerPronTarget)}}
+  if(mic){mic.disabled=!footerPronTarget;if(!SPANISH_RECOGNITION){mic.disabled=true;const s=document.querySelector('#pronCheckStatus');if(s)s.textContent='В этом браузере нет распознавания испанской речи. Озвучка доступна.'}mic.onclick=()=>startPronunciationCheck(footerPronTarget,{button:mic,status:document.querySelector('#pronCheckStatus'),recognized:document.querySelector('#pronCheckRecognized')})}
+  if(opts.message)setVoiceFooterTarget(footerPronTarget,opts.message);
+}
+
+function finishCorrectExercise(nextFn,buttonId='nextExercise'){
+  stopPronunciationCheck();headActions(`<button class="head-nav primary" id="${buttonId}">Следующее задание →</button>`);document.querySelector('#'+buttonId).onclick=nextFn;speak(speechText(current));
+}
+
+function renderStudy(){
+  const a=active();if(!a)return;const s=stat(topic);s.studyIndex=((s.studyIndex%a.length)+a.length)%a.length;const i=s.studyIndex,w=a[i],learned=s.learned.includes(w.es);
+  meta('Карточки',isSer?'Запомни связку: местоимение + форма SER':'Смотри, повторяй и проверяй произношение',`${i+1} / ${a.length}`,((i+1)/a.length)*100);
+  content.innerHTML=`<div class="study-single"><div class="flashcard">${visual(w)}<div class="card-copy"><div><div class="es ${isSer?'ser-main':''} ${topic.id==='conversations'?'conversation-main':''}">${mainEs(w)}</div><div class="ru">${isSer?`${w.ru} · форма глагола SER`:w.ru}</div></div><button class="speak" id="speakOne">🔊</button></div>${exampleBlock(w)}${voiceFooterHTML(true,'Сначала произнеси сам. Кнопка микрофона проверит текущую карточку.')}</div><div class="controls"><button class="btn warn" id="again">↻ Повторить</button><button class="btn good" id="know">${learned?'✓ Уже знаю':'✓ Знаю'}</button></div></div>`;
+  headActions('<button class="head-nav secondary" id="prev">← Назад</button><button class="head-nav primary" id="next">Дальше →</button>');bindExampleButtons(w,content);bindVoiceFooter(speechText(w));
+  document.querySelector('#speakOne').onclick=()=>speak(speechText(w));document.querySelector('#prev').onclick=()=>{s.studyIndex=(i-1+a.length)%a.length;saveState();renderStudy()};document.querySelector('#next').onclick=()=>{s.studyIndex=(i+1)%a.length;saveState();renderStudy()};
+  document.querySelector('#again').onclick=()=>{s.learned=s.learned.filter(x=>x!==w.es);saveState();speak(speechText(w));renderStudy()};document.querySelector('#know').onclick=()=>{if(!s.learned.includes(w.es))s.learned.push(w.es);saveState();toast('Отмечено как изученное');setTimeout(()=>{s.studyIndex=(i+1)%a.length;saveState();renderStudy()},250)};
+  if(STATE.settings.autoSpeak)setTimeout(()=>speak(speechText(w)),180);
+}
+
+function renderQuiz(){
+  const a=active();if(!a)return;round++;current=nextFairWord('quiz',a);const opts=makeOptions(current);
+  meta('Тест',isSer?'Выбери правильную форму глагола SER':topic.id==='colors'?'Как этот цвет называется по-испански?':topic.id==='conversations'?'Выбери правильную испанскую фразу':'Выбери испанский перевод',`вопрос ${round}`,(round%10)*10);
+  const prompt=isSer?`${visual(current,true)}<div class="subtle">Какая форма SER подходит?</div>`:topic.id==='colors'?visual(current,true):`<div class="prompt-word">${current.ru}</div><div class="subtle">выбери перевод</div>`;
+  content.innerHTML=`<div class="quiz-card-shell"><div class="quiz"><div class="prompt">${prompt}</div><div class="options">${opts.map(o=>`<button class="option ${isSer?'grammar-option':''}" data-a="${o.es}">${optionLabel(o)}</button>`).join('')}</div><div class="feedback" id="feedback"></div><div id="testExamples"></div></div>${voiceFooterHTML(false,'Можно ответить кнопками и отдельно проверить своё произношение.')}</div>`;
+  bindVoiceFooter(speechText(current));
+  document.querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(b.disabled)return;const ok=b.dataset.a===current.es;register(topic,ok);const f=document.querySelector('#feedback');if(!ok){flashWrong(b);f.textContent='Неверно. Попробуй ещё раз.';f.className='feedback bad';return}
+    document.querySelectorAll('.option').forEach(x=>x.disabled=true);b.classList.add('correct');f.textContent=`¡Muy bien! ${feedbackText(current)}`;f.className='feedback ok';if(isSer){const ex=document.querySelector('#testExamples');ex.innerHTML=exampleBlock(current,'test-examples');bindExampleButtons(current,ex)}finishCorrectExercise(renderQuiz,'nextQuiz');
+  });
+}
+
+function renderListen(){
+  const a=active();if(!a)return;current=nextFairWord('listen',a);const opts=makeOptions(current);
+  meta('На слух',isSer?'Услышь местоимение и форму SER':topic.id==='conversations'?'Услышь испанскую фразу и выбери значение':'Услышь испанское слово и выбери значение','🎧',0);
+  const choices=topic.id==='colors'?`<div class="choice-grid">${opts.map(o=>`<button class="color-choice" data-a="${o.es}" style="background:${o.hex}" title="Выбрать цвет"></button>`).join('')}</div>`:`<div class="choice-grid">${opts.map(o=>`<button class="choice ${isSer?'ser-choice':''}" data-a="${o.es}">${isSer?`<b>${o.pronoun}</b><span>${o.form}</span>`:o.ru}</button>`).join('')}</div>`;
+  content.innerHTML=`<div class="quiz-card-shell"><div class="audio-wrap"><button class="audio-big" id="play">🔊</button><p class="subtle">Можно нажимать ещё раз для повтора.</p>${choices}<div class="feedback" id="feedback"></div></div>${voiceFooterHTML(false,'После прослушивания можешь повторить слово сам и проверить произношение.')}</div>`;bindVoiceFooter(speechText(current));document.querySelector('#play').onclick=()=>speak(speechText(current));
+  document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{if(b.disabled)return;const ok=b.dataset.a===current.es;register(topic,ok);const f=document.querySelector('#feedback');if(!ok){flashWrong(b);f.textContent='Неверно. Послушай ещё раз и выбери другой вариант.';f.className='feedback bad';return}document.querySelectorAll('[data-a]').forEach(x=>x.disabled=true);b.classList.add('correct');f.textContent=`¡Sí! ${feedbackText(current)}`;f.className='feedback ok';finishCorrectExercise(renderListen,'nextListen')});
+  setTimeout(()=>speak(speechText(current)),220);
+}
+
+function renderDictation(){
+  const a=active();if(!a)return;current=nextFairWord('dictation',a);meta('Диктант',isSer?'Прослушай и напиши форму SER':topic.id==='conversations'?'Прослушай и напечатай фразу по-испански':'Прослушай и напечатай слово по-испански','⌨️',0);
+  content.innerHTML=`<div class="quiz-card-shell"><div class="dict-wrap"><button class="audio-big" id="play">🔊</button><p class="subtle">${isSer?'Напиши только форму глагола, например: soy':'Слушай столько раз, сколько нужно.'}</p><form id="form"><input id="input" class="dict-input" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="${isSer?'Форма SER…':'Напиши слово…'}"><button class="btn primary" style="width:100%;margin-top:10px">Проверить</button></form><div class="feedback" id="feedback"></div></div>${voiceFooterHTML(false,'Можно также произнести ответ и проверить испанское произношение.')}</div>`;bindVoiceFooter(speechText(current));document.querySelector('#play').onclick=()=>speak(speechText(current));
+  document.querySelector('#form').onsubmit=e=>{e.preventDefault();const input=document.querySelector('#input'),val=norm(input.value);let ok=val===norm(current.es);if(isSer)ok=ok||val===norm(`${current.pronoun} ${current.form}`);else if(topic.id==='conversations'||topic.id==='school')ok=looseAnswer(input.value)===looseAnswer(current.es);else ok=ok||(current.es==='marrón'&&val==='marron')||(current.es==='miércoles'&&val==='miercoles')||(current.es==='sábado'&&val==='sabado');register(topic,ok);const f=document.querySelector('#feedback');if(!ok){wrongSignal();input.classList.add('wrong-input');f.textContent='Неверно. Попробуй ещё раз.';f.className='feedback bad';setTimeout(()=>input.classList.remove('wrong-input'),430);input.select();return}input.disabled=true;f.textContent=`¡Perfecto! ${feedbackText(current)}`;f.className='feedback ok';finishCorrectExercise(renderDictation,'nextDictation')};
+  document.querySelector('#input').focus();setTimeout(()=>speak(speechText(current)),220);
+}
+
+function speedIntro(){meta('60 секунд',isSer?'Быстро подбирай форму SER к местоимению':'Быстрый раунд на автоматизм','⚡',0);content.innerHTML=`<div class="empty"><div style="font-size:72px">⚡</div><h2>Быстрый раунд</h2><p class="subtle">${isSer?'За минуту выбери как можно больше правильных форм SER.':'За минуту выбери как можно больше правильных переводов.'}</p><button class="btn primary" id="start">Начать</button></div>`;document.querySelector('#start').onclick=startSpeed}
+function startSpeed(){speedTime=60;speedScore=0;const a=activeWords(topic);if(a.length)resetDeck('speed',a);renderSpeed();speedTimer=setInterval(()=>{speedTime--;const t=document.querySelector('#time');if(t)t.textContent=speedTime+'с';document.querySelector('#progressBar').style.width=(speedTime/60*100)+'%';if(speedTime<=0){clearInterval(speedTimer);finishSpeed()}},1000)}
+function renderSpeed(){
+  const a=active();if(!a)return;current=nextFairWord('speed',a);const opts=makeOptions(current);meta('60 секунд',isSer?'Местоимение → форма SER':'Выбирай как можно быстрее',`счёт ${speedScore}`,speedTime/60*100);const prompt=isSer?visual(current,true):topic.id==='colors'?visual(current,true):`<div class="prompt-word">${current.ru}</div>`;
+  content.innerHTML=`<div class="quiz-card-shell"><div class="quiz"><div class="speed-head"><b>${speedScore}</b><div id="time">${speedTime}с</div></div><div class="prompt">${prompt}</div><div class="options">${opts.map(o=>`<button class="option ${isSer?'grammar-option':''}" data-a="${o.es}">${optionLabel(o)}</button>`).join('')}</div><div class="feedback" id="feedback"></div></div>${voiceFooterHTML(false,'Проверка произношения доступна и в быстром раунде; таймер при этом продолжает идти.')}</div>`;bindVoiceFooter(speechText(current));
+  document.querySelectorAll('.option').forEach(b=>b.onclick=()=>{if(b.disabled)return;const ok=b.dataset.a===current.es;register(topic,ok);const f=document.querySelector('#feedback');if(!ok){flashWrong(b);f.textContent='Неверно — попробуй ещё раз.';f.className='feedback bad';return}document.querySelectorAll('.option').forEach(x=>x.disabled=true);b.classList.add('correct');speedScore++;f.textContent='Верно';f.className='feedback ok';speak(speechText(current),()=>{if(speedTime>0)renderSpeed()})});
+}
+function finishSpeed(){meta('Раунд окончен','60 секунд завершены','🏁',100);content.innerHTML=`<div class="empty"><div style="font-size:70px">🏁</div><h2>Результат: ${speedScore}</h2><p class="subtle">Ещё один раунд хорошо закрепляет автоматическое узнавание.</p></div>`;headActions('<button class="head-nav primary" id="again">Ещё 60 секунд →</button>');document.querySelector('#again').onclick=startSpeed}
+
+function renderMatch(){
+  const a=active();if(!a)return;matchFirst=null;matchLock=false;const n=Math.min(6,a.length),chosen=takeFairBatch('match',a,n);let cards;if(isSer)cards=shuffle([...chosen.map((w,i)=>({pair:i,type:'pronoun',w})),...chosen.map((w,i)=>({pair:i,type:'form',w}))]);else if(topic.id==='colors')cards=shuffle([...chosen.map((w,i)=>({pair:i,type:'es',w})),...chosen.map((w,i)=>({pair:i,type:'color',w}))]);else cards=shuffle([...chosen.map((w,i)=>({pair:i,type:'es',w})),...chosen.map((w,i)=>({pair:i,type:'ru',w}))]);
+  meta('Пары',isSer?'Соедини местоимение с формой SER':topic.id==='colors'?'Соедини испанское слово с цветом':'Соедини испанское слово и перевод',`${n} пар`,0);
+  const cardHtml=x=>{if(topic.id==='colors'&&x.type==='color')return `<button class="match-card color-match-card" data-pair="${x.pair}" aria-label="цвет ${x.w.es}"><span class="match-color" style="background:${x.w.hex}"></span></button>`;const label=isSer?(x.type==='pronoun'?x.w.pronoun:x.w.form):(x.type==='es'?x.w.es:x.w.ru);return `<button class="match-card ${isSer?'grammar-match':''}" data-pair="${x.pair}">${label}</button>`};
+  content.innerHTML=`<div class="quiz-card-shell"><div class="match-grid">${cards.map(cardHtml).join('')}</div><div class="feedback" id="feedback"></div>${voiceFooterHTML(false,'Выбери карточку — после этого можно проверить произношение соответствующего испанского слова или формы.')}</div>`;bindVoiceFooter(null,{message:'Выбери карточку пары, чтобы включить проверку произношения.'});let matched=0;
+  document.querySelectorAll('.match-card').forEach(el=>el.onclick=()=>{if(matchLock||el.classList.contains('matched'))return;const w=chosen[+el.dataset.pair];setVoiceFooterTarget(speechText(w),'Проверяем: произнеси испанский вариант выбранной пары.');if(!matchFirst){matchFirst=el;el.classList.add('selected');return}if(matchFirst===el){el.classList.remove('selected');matchFirst=null;return}matchLock=true;el.classList.add('selected');const first=matchFirst,second=el,ok=first.dataset.pair===second.dataset.pair;if(ok){register(topic,true);const pairW=chosen[+second.dataset.pair];first.classList.remove('selected');second.classList.remove('selected');first.classList.add('matched');second.classList.add('matched');matched++;document.querySelector('#progressBar').style.width=matched/n*100+'%';setVoiceFooterTarget(speechText(pairW),'Пара найдена. Теперь можешь повторить и проверить произношение.');speak(speechText(pairW));matchFirst=null;matchLock=false;if(matched===n){const f=document.querySelector('#feedback');f.textContent='¡Muy bien! Все пары найдены.';f.className='feedback ok';headActions('<button class="head-nav primary" id="againPairs">Ещё раз →</button>');document.querySelector('#againPairs').onclick=renderMatch}return}register(topic,false);wrongSignal();first.classList.add('pair-wrong');second.classList.add('pair-wrong');const f=document.querySelector('#feedback');f.textContent='Не пара. Попробуй ещё раз.';f.className='feedback bad';setTimeout(()=>{first.classList.remove('selected','pair-wrong');second.classList.remove('selected','pair-wrong');matchFirst=null;matchLock=false},480)});
+}
+
+function go(m){
+  clearInterval(speedTimer);stopPronunciationCheck();mode=m;
+  const a=activeWords(topic);
+  if(['quiz','listen','dictation','match'].includes(m)&&a.length)resetDeck(m,a);
+  if(m==='quiz')round=0;
+  document.querySelectorAll('.mode-tab').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));
+  ({study:renderStudy,quiz:renderQuiz,listen:renderListen,dictation:renderDictation,speed:speedIntro,match:renderMatch}[m])()
+}
+document.querySelectorAll('.mode-tab').forEach(b=>b.onclick=()=>go(b.dataset.mode));
+document.addEventListener('keydown',e=>{if(mode==='study'&&!['INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName)){const a=activeWords(topic),s=stat(topic);if(!a.length)return;if(e.key==='ArrowRight'){s.studyIndex=(s.studyIndex+1)%a.length;saveState();renderStudy()}if(e.key==='ArrowLeft'){s.studyIndex=(s.studyIndex-1+a.length)%a.length;saveState();renderStudy()}if(e.key===' '){e.preventDefault();speak(speechText(a[s.studyIndex%a.length]))}}});
+renderStudy();
+</script></body></html>

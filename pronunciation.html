@@ -1,0 +1,162 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Произношение — Español</title><link rel="stylesheet" href="styles.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<div class="shell">
+<header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="index.html">←</a><div class="appbar-title"><h1>Произношение</h1><small>слова и фразы из выбранных тем</small></div></div><div class="appbar-actions"><a class="iconbtn" href="settings.html">⚙ Общие настройки</a><a class="iconbtn" href="index.html">⌂ Главная</a></div></header>
+<main class="workspace pronunciation-workspace">
+  <div class="workspace-head"><div><h2>Скажи вслух</h2><div class="subtle">Сначала произнеси сам. 🔊 — только для принудительной подсказки.</div></div><div class="workspace-head-right"><div class="subtle" id="counter"></div><div class="workspace-actions"><button class="head-nav secondary" id="practiceSettings">⚙ Практика</button><button class="head-nav secondary" id="skip">Пропустить →</button></div></div></div>
+  <div class="progress"><div id="progressBar"></div></div>
+
+  <section class="pron-settings hidden" id="pronSettings">
+    <div class="pron-settings-head"><div><h3>Настройки произношения</h3><p>Выбери темы и сложность материала. Нажми «Начать», чтобы пересобрать задания.</p></div><button class="settings-close" id="closePracticeSettings" aria-label="Закрыть">×</button></div>
+    <div class="pron-settings-grid">
+      <div class="pron-setting-group">
+        <div class="pron-group-title"><b>1. Темы</b><div class="mini-actions"><button id="selectAllTopics">Все</button><button id="clearTopics">Снять все</button></div></div>
+        <div class="pron-topic-options" id="pronTopicOptions"></div>
+      </div>
+      <div class="pron-setting-group">
+        <div class="pron-group-title"><b>2. Материал</b></div>
+        <div class="pron-content-options">
+          <label class="pron-radio"><input type="radio" name="pronContent" value="words"><span><b>Только слова</b><small>Отдельные слова; для SER — местоимение + форма: «Yo soy».</small></span></label>
+          <label class="pron-radio"><input type="radio" name="pronContent" value="basic"><span><b>Базовые фразы</b><small>Слова + короткие учебные фразы: «Hoy es lunes», «Estamos en enero».</small></span></label>
+          <label class="pron-radio"><input type="radio" name="pronContent" value="all"><span><b>Всё, включая примеры</b><small>Слова + базовые фразы + предложения из примеров, например из темы SER.</small></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="pron-settings-summary"><span id="pronSummary"></span><button class="head-nav" id="applyPracticeSettings">Начать с этими настройками →</button></div>
+  </section>
+
+  <div id="practice"></div>
+</main>
+</div><div id="toast" class="toast"></div>
+<script src="data.js"></script><script src="common.js"></script><script>
+const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+const PRAISE=['¡Muy bien!','¡Perfecto!','¡Excelente!','¡Muy bien pronunciado!'];
+let deck=[],index=0,current=null,recognition=null,listening=false;
+
+function strip(s){return (s||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zñü0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
+function serPronoun(w){return ({soy:'Yo',eres:'Tú',es:'Ella',somos:'Nosotros',sois:'Vosotros',son:'Ellos'})[w.es]||w.pronoun.split('/')[0].trim()}
+function pronCfg(){return STATE.settings.pronunciation}
+function topicChosen(id){return pronCfg().topics.includes(id)}
+
+function wordItem(t,w){
+  if(t.id==='ser'){
+    const p=serPronoun(w);return {text:`${p} ${w.form}.`,ru:`${w.ru}: форма SER — ${w.form}`,topic:t.title,kind:'слово / форма',level:'word'};
+  }
+  if(t.id==='conversations')return {text:w.es,ru:w.ru,topic:t.title,kind:'фраза',level:'word'};
+  return {text:w.es,ru:w.ru,topic:t.title,kind:'слово',level:'word'};
+}
+function basicItem(t,w){
+  if(w.categoryPhrase)return null;
+  if(t.id==='colors')return {text:`El color es ${w.es}.`,ru:`Цвет — ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
+  if(t.id==='weekdays')return {text:`Hoy es ${w.es}.`,ru:`Сегодня ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
+  if(t.id==='months')return {text:`Estamos en ${w.es}.`,ru:`Сейчас ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
+  if(t.id==='ser')return {text:`${serPronoun(w)} ${w.form}.`,ru:`${w.ru}: ${w.form}`,topic:t.title,kind:'базовая фраза',level:'basic'};
+  if(t.id==='school')return {text:`Es ${w.es}.`,ru:`Это ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
+  return null;
+}
+function exampleItems(t,w){
+  const out=[];
+  if(w.exampleEs)out.push({text:w.exampleEs,ru:w.exampleRu||'',topic:t.title,kind:'пример',level:'example'});
+  if(w.example2Es)out.push({text:w.example2Es,ru:w.example2Ru||'',topic:t.title,kind:'пример',level:'example'});
+  return out;
+}
+function makeDeck(){
+  const out=[],content=pronCfg().content;
+  Object.values(TOPICS).filter(t=>topicChosen(t.id)).forEach(t=>{
+    activeWords(t).forEach(w=>{
+      out.push(wordItem(t,w));
+      if(content==='basic'||content==='all'){
+        const b=basicItem(t,w);if(b && strip(b.text)!==strip(out[out.length-1].text))out.push(b);
+      }
+      if(content==='all')out.push(...exampleItems(t,w));
+    })
+  });
+  return shuffle(out);
+}
+function rebuildDeck(){stopRecognition();deck=makeDeck();index=0;render();renderSettingsSummary()}
+function ensureDeck(){if(!deck.length){deck=makeDeck();index=0}if(index>=deck.length&&deck.length){deck=shuffle(deck);index=0}}
+function render(){
+  stopRecognition();ensureDeck();
+  if(!deck.length){
+    document.querySelector('#counter').textContent='0 заданий';document.querySelector('#progressBar').style.width='0%';
+    document.querySelector('#practice').innerHTML='<div class="empty"><h2>Нет материала для практики</h2><p class="subtle">Выбери хотя бы одну тему и проверь, что в ней есть активные слова.</p><button class="head-nav" id="openEmptySettings">⚙ Настроить произношение</button></div>';
+    document.querySelector('#openEmptySettings').onclick=()=>togglePracticeSettings(true);return;
+  }
+  current=deck[index];
+  document.querySelector('#counter').textContent=`${index+1} / ${deck.length}`;
+  document.querySelector('#progressBar').style.width=((index+1)/deck.length*100)+'%';
+  document.querySelector('#practice').innerHTML=`<section class="pronounce-card"><div class="pronounce-meta"><span>${current.topic}</span><b>${current.kind}</b></div><div class="pronounce-target">${current.text}</div><div class="pronounce-translation">${current.ru}</div><div class="pronounce-actions"><button class="pronounce-listen" id="hear">🔊 <span>Послушать</span></button><button class="pronounce-mic" id="mic">🎙 <span>Произнести</span></button></div><div class="speech-status" id="status">Произнеси текст вслух и нажми кнопку микрофона.</div><div class="recognized" id="recognized"></div></section>`;
+  document.querySelector('#hear').onclick=()=>speak(current.text);
+  document.querySelector('#mic').onclick=startRecognition;
+  if(!Recognition){
+    const b=document.querySelector('#mic');b.disabled=true;b.classList.add('disabled');
+    document.querySelector('#status').textContent='В этом браузере нет функции распознавания испанской речи. Озвучка по кнопке доступна.';
+  }
+}
+function next(){stopRecognition();if(!deck.length)return;index++;render()}
+function setStatus(text,cls=''){const el=document.querySelector('#status');if(!el)return;el.textContent=text;el.className='speech-status '+cls}
+function stopRecognition(){if(recognition){try{recognition.onend=null;recognition.stop()}catch(e){} recognition=null}listening=false}
+function startRecognition(){
+  if(!Recognition||listening||!current)return;
+  speechSynthesis.cancel();
+  recognition=new Recognition(); recognition.lang='es-ES'; recognition.interimResults=false; recognition.continuous=false; recognition.maxAlternatives=5;
+  listening=true;setStatus('Слушаю…','listening');
+  const mic=document.querySelector('#mic');if(mic)mic.classList.add('recording');
+  recognition.onresult=e=>{
+    const alts=[];for(let i=0;i<e.results[0].length;i++)alts.push(e.results[0][i].transcript);
+    const wanted=strip(current.text); const ok=alts.some(x=>strip(x)===wanted); const heard=alts[0]||'';
+    const r=document.querySelector('#recognized');if(r)r.textContent=heard?`Распознано: ${heard}`:'';
+    listening=false;if(mic)mic.classList.remove('recording');
+    if(ok){
+      setStatus('Произношение распознано правильно.','ok');
+      const praise=pick(PRAISE); speak(praise,()=>setTimeout(next,300));
+    }else{
+      setStatus('Попробуй ещё раз. Сейчас прозвучит правильный вариант.','bad');
+      wrongSignal();
+      speak(current.text,()=>{setTimeout(()=>{if(document.visibilityState==='visible')startRecognition()},500)});
+    }
+  };
+  recognition.onerror=e=>{
+    listening=false;if(mic)mic.classList.remove('recording');
+    if(e.error==='not-allowed'||e.error==='service-not-allowed')setStatus('Нет доступа к микрофону. Разреши микрофон в браузере и попробуй снова.','bad');
+    else if(e.error==='no-speech')setStatus('Речь не услышана. Нажми микрофон и повтори ещё раз.','bad');
+    else setStatus('Не удалось распознать речь. Нажми микрофон и попробуй ещё раз.','bad');
+  };
+  recognition.onend=()=>{listening=false;const m=document.querySelector('#mic');if(m)m.classList.remove('recording')};
+  try{recognition.start()}catch(e){listening=false;setStatus('Не удалось включить микрофон. Попробуй ещё раз.','bad')}
+}
+
+function renderPracticeSettings(){
+  const box=document.querySelector('#pronTopicOptions');
+  box.innerHTML=Object.values(TOPICS).map(t=>{
+    const n=activeWords(t).length,checked=topicChosen(t.id)?'checked':'';
+    return `<label class="pron-topic-check"><input type="checkbox" value="${t.id}" ${checked}><span class="pron-topic-icon">${t.icon}</span><span><b>${t.title}</b><small>${n} активн. ${n===1?'элемент':'элементов'}</small></span></label>`;
+  }).join('');
+  box.querySelectorAll('input').forEach(i=>i.onchange=()=>{syncTopicsFromUI();renderSettingsSummary()});
+  const r=document.querySelector(`input[name="pronContent"][value="${pronCfg().content}"]`);if(r)r.checked=true;
+  document.querySelectorAll('input[name="pronContent"]').forEach(i=>i.onchange=()=>{pronCfg().content=i.value;saveState();renderSettingsSummary()});
+  renderSettingsSummary();
+}
+function syncTopicsFromUI(){pronCfg().topics=[...document.querySelectorAll('#pronTopicOptions input:checked')].map(i=>i.value);saveState()}
+function selectTopics(all){
+  document.querySelectorAll('#pronTopicOptions input').forEach(i=>i.checked=all);
+  syncTopicsFromUI();renderSettingsSummary();
+}
+function previewCount(){return makeDeck().length}
+function renderSettingsSummary(){
+  const el=document.querySelector('#pronSummary');if(!el)return;
+  const ids=pronCfg().topics,mode={words:'только слова',basic:'слова + базовые фразы',all:'весь материал'}[pronCfg().content];
+  el.textContent=`Тем: ${ids.length} из ${Object.keys(TOPICS).length} · ${mode} · примерно ${previewCount()} заданий`;
+}
+function togglePracticeSettings(force){
+  const p=document.querySelector('#pronSettings');const open=typeof force==='boolean'?force:p.classList.contains('hidden');
+  p.classList.toggle('hidden',!open);if(open){renderPracticeSettings();p.scrollIntoView({behavior:'smooth',block:'nearest'})}
+}
+
+document.querySelector('#skip').onclick=next;
+document.querySelector('#practiceSettings').onclick=()=>togglePracticeSettings();
+document.querySelector('#closePracticeSettings').onclick=()=>{syncTopicsFromUI();togglePracticeSettings(false);rebuildDeck()};
+document.querySelector('#selectAllTopics').onclick=()=>selectTopics(true);
+document.querySelector('#clearTopics').onclick=()=>selectTopics(false);
+document.querySelector('#applyPracticeSettings').onclick=()=>{syncTopicsFromUI();togglePracticeSettings(false);rebuildDeck();toast('Настройки практики применены')};
+renderPracticeSettings();render();
+</script></body></html>
