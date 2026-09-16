@@ -7,7 +7,7 @@
   <section class="quick-stats" id="overall"></section>
 </div><div id="toast" class="toast"></div>
 <script src="data.js"></script><script src="common.js"></script><script>
-const icons={colors:'colors-icon',weekdays:'days-icon',months:'months-icon',ser:'ser-icon',conversations:'conversations-icon',school:'school-icon',adjectives:'adjectives-icon'};
+const icons={colors:'colors-icon',weekdays:'days-icon',months:'months-icon',ser:'ser-icon',conversations:'conversations-icon',school:'school-icon',adjectives:'adjectives-icon',numerals:'numerals-icon'};
 const box=document.querySelector('#topics');
 box.innerHTML=Object.values(TOPICS).map(t=>{const ss=statsSummary(t),act=activeWords(t).length;return `<a class="topic-card" href="trainer.html?topic=${t.id}"><div class="topic-icon ${icons[t.id]||''}">${t.icon}</div><h2>${t.title}</h2><p>${t.description}</p><div class="topic-meta"><span><b>${act}</b> активно</span><span><b>${ss.learned}</b> изучено</span></div><div class="topic-cta">Открыть тему →</div></a>`}).join('');
 let totalCorrect=0,total=0,learned=0,active=0;Object.values(TOPICS).forEach(t=>{const s=stat(t);totalCorrect+=s.correct;total+=s.total;learned+=statsSummary(t).learned;active+=activeWords(t).length});

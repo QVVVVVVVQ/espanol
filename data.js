@@ -99,5 +99,31 @@ window.TRAINER_TOPICS = {
       {es:'sorprendido',ru:'удивлённый',symbol:'😲'},
       {es:'enamorado',ru:'влюблённый',symbol:'😍'}
     ]
+  },
+  numerals:{
+    id:'numerals', title:'Числительные', esTitle:'Los números', icon:'🔢', description:'21 число: от 0 до 20', accent:'#5b78d6',
+    words:[
+      {es:'cero',ru:'0',symbol:'0'},
+      {es:'uno',ru:'1',symbol:'1'},
+      {es:'dos',ru:'2',symbol:'2'},
+      {es:'tres',ru:'3',symbol:'3'},
+      {es:'cuatro',ru:'4',symbol:'4'},
+      {es:'cinco',ru:'5',symbol:'5'},
+      {es:'seis',ru:'6',symbol:'6'},
+      {es:'siete',ru:'7',symbol:'7'},
+      {es:'ocho',ru:'8',symbol:'8'},
+      {es:'nueve',ru:'9',symbol:'9'},
+      {es:'diez',ru:'10',symbol:'10'},
+      {es:'once',ru:'11',symbol:'11'},
+      {es:'doce',ru:'12',symbol:'12'},
+      {es:'trece',ru:'13',symbol:'13'},
+      {es:'catorce',ru:'14',symbol:'14'},
+      {es:'quince',ru:'15',symbol:'15'},
+      {es:'dieciséis',ru:'16',symbol:'16'},
+      {es:'diecisiete',ru:'17',symbol:'17'},
+      {es:'dieciocho',ru:'18',symbol:'18'},
+      {es:'diecinueve',ru:'19',symbol:'19'},
+      {es:'veinte',ru:'20',symbol:'20'}
+    ]
   }
 };
