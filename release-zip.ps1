@@ -54,10 +54,10 @@ Copy-Item -Path (Join-Path $src '*') -Destination $repo -Recurse -Force
 Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
 
 # Служебные файлы всегда берём из репозитория, даже если ГПТ положил свои версии
-$protected = @('sw.js','manifest.webmanifest','icon-192.png','icon-512.png','release-zip.ps1','release-zip.bat','for-gpt.ps1','for-gpt.bat','migrate.ps1','migrate.bat')
+$protected = @('sw.js','manifest.webmanifest','icon-192.png','icon-512.png','release-zip.ps1','release-zip.bat','for-gpt.ps1','for-gpt.bat')
+$tracked = git ls-files
 foreach ($f in $protected) {
-  git ls-files --error-unmatch $f *> $null
-  if ($LASTEXITCODE -eq 0) { git checkout -- $f *> $null }
+  if ($tracked -contains $f) { git checkout -- $f *> $null }
 }
 if (-not (Test-Path (Join-Path $repo '.nojekyll'))) { New-Item -ItemType File -Path (Join-Path $repo '.nojekyll') | Out-Null }
 
