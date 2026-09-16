@@ -1,7 +1,8 @@
 const TOPICS=window.TRAINER_TOPICS;
 const STORAGE='spanishTrainerV3';
-const CONTENT_REVISION=2;
+const CONTENT_REVISION=3;
 const REV2_ADDITIONS={colors:['los colores'],months:['Los meses del año'],conversations:['Mucho gusto','No sé','¿Cómo se llama?','Se llama...'],school:['un pupitre','una silla','una pizarra','un bolígrafo','una tiza','unas tijeras','una hoja','una escuela','un profesor','una clase','una regla','un pegamento']};
+const REV3_ADDITIONS={conversations:['¿Cuántos años tienes?','Tengo once años.'],school:['un rotulador']};
 const PRE_V2_TOPICS=['colors','weekdays','months','ser','conversations','school'];
 function defaultState(){
   const stats={}; const active={};
@@ -21,7 +22,8 @@ function loadState(){
     s.settings.active[t.id]=Array.isArray(s.settings.active[t.id])?s.settings.active[t.id].filter(x=>t.words.some(w=>w.es===x)):d.settings.active[t.id];
     s.stats[t.id]=Object.assign({},d.stats[t.id],s.stats[t.id]||{});
   });
-  if((Number(s.contentRevision)||0)<CONTENT_REVISION){
+  const currentRevision=Number(s.contentRevision)||0;
+  if(currentRevision<2){
     Object.entries(REV2_ADDITIONS).forEach(([id,words])=>{
       if(!TOPICS[id])return;
       const arr=s.settings.active[id]||(s.settings.active[id]=[]);
@@ -29,8 +31,15 @@ function loadState(){
     });
     const selected=s.settings.pronunciation.topics||[];
     if(PRE_V2_TOPICS.every(id=>selected.includes(id))&&!selected.includes('adjectives'))selected.push('adjectives');
-    s.contentRevision=CONTENT_REVISION;
   }
+  if(currentRevision<3){
+    Object.entries(REV3_ADDITIONS).forEach(([id,words])=>{
+      if(!TOPICS[id])return;
+      const arr=s.settings.active[id]||(s.settings.active[id]=[]);
+      words.forEach(word=>{if(TOPICS[id].words.some(w=>w.es===word)&&!arr.includes(word))arr.push(word)});
+    });
+  }
+  if(currentRevision<CONTENT_REVISION)s.contentRevision=CONTENT_REVISION;
   if(localStorage.getItem('coloresState') && !localStorage.getItem(STORAGE)){
     try{
       const old=JSON.parse(localStorage.getItem('coloresState'));

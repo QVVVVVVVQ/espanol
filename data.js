@@ -39,7 +39,7 @@ window.TRAINER_TOPICS = {
     ]
   },
   conversations:{
-    id:'conversations', title:'Беседы', esTitle:'Conversaciones', icon:'💬', description:'17 фраз: приветствия, знакомство и простое общение', accent:'#28a67a', kind:'phrases',
+    id:'conversations', title:'Беседы', esTitle:'Conversaciones', icon:'💬', description:'19 фраз: приветствия, знакомство и простое общение', accent:'#28a67a', kind:'phrases',
     words:[
       {es:'Hola',ru:'Привет',hint:'[ола]',symbol:'👋'},
       {es:'adiós',ru:'Пока / До свидания',hint:'[адьос]',symbol:'👋'},
@@ -57,11 +57,13 @@ window.TRAINER_TOPICS = {
       {es:'Mucho gusto',ru:'Очень приятно',symbol:'🤝'},
       {es:'No sé',ru:'Не знаю',symbol:'🤷'},
       {es:'¿Cómo se llama?',ru:'Как вас зовут?',symbol:'💬'},
-      {es:'Se llama...',ru:'Его / её зовут...',symbol:'🙋'}
+      {es:'Se llama...',ru:'Его / её зовут...',symbol:'🙋'},
+      {es:'¿Cuántos años tienes?',ru:'Сколько тебе лет?',symbol:'🎂'},
+      {es:'Tengo once años.',ru:'Мне 11 лет.',symbol:'1️⃣'}
     ]
   },
   school:{
-    id:'school', title:'Школа', esTitle:'La escuela', icon:'🎒', description:'22 базовых слова о школе и классе', accent:'#e35f7a',
+    id:'school', title:'Школа', esTitle:'La escuela', icon:'🎒', description:'23 базовых слова о школе и классе', accent:'#e35f7a',
     words:[
       {es:'una mesa',ru:'стол',symbol:`<svg class="school-svg" viewBox="0 0 96 96" aria-hidden="true"><rect x="14" y="28" width="68" height="12" rx="4" fill="#b87945"/><rect x="20" y="40" width="7" height="38" rx="3" fill="#7a4d2d"/><rect x="69" y="40" width="7" height="38" rx="3" fill="#7a4d2d"/><path d="M24 54h48" stroke="#7a4d2d" stroke-width="5" stroke-linecap="round"/><path d="M16 28h64" stroke="#dba06b" stroke-width="4" stroke-linecap="round"/></svg>`},
       {es:'un libro',ru:'книга',symbol:'📖'},
@@ -77,6 +79,7 @@ window.TRAINER_TOPICS = {
       {es:'una silla',ru:'стул',symbol:'🪑'},
       {es:'una pizarra',ru:'доска',symbol:'▰'},
       {es:'un bolígrafo',ru:'ручка',symbol:'🖊️'},
+      {es:'un rotulador',ru:'фломастер',symbol:`<svg class="school-svg" viewBox="0 0 96 96" aria-hidden="true"><g transform="rotate(-38 48 48)"><rect x="39" y="13" width="18" height="61" rx="7" fill="#35a86b"/><rect x="39" y="13" width="18" height="15" rx="6" fill="#23734a"/><rect x="42" y="28" width="12" height="38" rx="4" fill="#5fd18f"/><path d="M39 74h18l-4 10H43z" fill="#30343b"/><path d="M43 84h10l-5 7z" fill="#202328"/><path d="M42 35h12" stroke="#dff7e9" stroke-width="3" stroke-linecap="round"/></g></svg>`},
       {es:'una tiza',ru:'мел',symbol:'▭'},
       {es:'unas tijeras',ru:'ножницы',symbol:'✂️'},
       {es:'una hoja',ru:'лист',symbol:'📄'},
