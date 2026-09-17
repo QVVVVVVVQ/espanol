@@ -111,6 +111,18 @@ window.TRAINER_TOPICS = {
       {es:'enamorado',ru:'влюблённый',symbol:'😍'}
     ]
   },
+  animals:{
+    id:'animals', title:'Животные', esTitle:'Los animales', icon:'🐾', description:'7 базовых названий животных', accent:'#c37a35',
+    words:[
+      {es:'una mariposa',ru:'бабочка',symbol:'🦋'},
+      {es:'una rana',ru:'лягушка',symbol:'🐸'},
+      {es:'una mariquita',ru:'божья коровка',symbol:'🐞'},
+      {es:'un perro',ru:'собака',symbol:'🐶'},
+      {es:'un gato',ru:'кошка',symbol:'🐱'},
+      {es:'un pollito',ru:'цыплёнок',symbol:'🐥'},
+      {es:'un oso',ru:'медведь',symbol:'🐻'}
+    ]
+  },
   numerals:{
     id:'numerals', title:'Числительные', esTitle:'Los números', icon:'🔢', description:'21 число: от 0 до 20', accent:'#5b78d6',
     words:[
