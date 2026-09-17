@@ -7,14 +7,14 @@
 </div><div id="toast" class="toast"></div>
 <script src="data.js"></script><script src="common.js"></script><script>
 const box=document.querySelector('#topicSettings');
-function rowVisual(t,w){if(t.id==='colors')return `<span class="dot" style="background:${w.hex}"></span>`;if(t.id==='ser')return `<span class="grammar-chip">${w.pronoun}</span>`;return `<span class="dot text-dot">${w.symbol||t.icon}</span>`}
-function rowTitle(t,w){return t.id==='ser'?`${w.pronoun} — ${w.form}`:w.es}
-function rowSub(t,w){return t.id==='ser'?`${w.ru} · ${w.exampleEs}`:(w.hint?`${w.hint} · ${w.ru}`:w.ru)}
+function rowVisual(t,w){if(t.id==='colors')return `<span class="dot" style="background:${w.hex}"></span>`;if(t.kind==='verb')return `<span class="grammar-chip">${w.pronoun}</span>`;return `<span class="dot text-dot">${w.symbol||t.icon}</span>`}
+function rowTitle(t,w){return t.kind==='verb'?`${w.pronoun} — ${w.form}`:w.es}
+function rowSub(t,w){return t.kind==='verb'?`${w.ru} · ${w.exampleEs}`:(w.hint?`${w.hint} · ${w.ru}`:w.ru)}
 function render(){box.innerHTML=Object.values(TOPICS).map(t=>{const activeSet=STATE.settings.active[t.id];return `<section class="settings-card" id="${t.id}"><h2>${t.icon} ${t.title}</h2><p><b>${activeSet.length}</b> из ${t.words.length} карточек активно</p><div class="settings-actions"><button class="btn soft all" data-topic="${t.id}">Включить все</button><button class="btn soft none" data-topic="${t.id}">Выключить все</button><a class="ghostbtn" href="trainer.html?topic=${t.id}">Открыть тему →</a></div><div class="dict-list">${t.words.map(w=>{const on=activeSet.includes(w.es);return `<div class="word-row ${on?'':'off'}"><label class="switch"><input class="toggle" type="checkbox" data-topic="${t.id}" data-word="${w.es}" ${on?'checked':''}><span class="slider"></span></label>${rowVisual(t,w)}<span class="word-main"><b>${rowTitle(t,w)}</b><span>${rowSub(t,w)}</span></span><button class="iconbtn say" data-topic="${t.id}" data-word="${w.es}">🔊</button></div>`}).join('')}</div></section>`}).join('');
   document.querySelectorAll('.toggle').forEach(x=>x.onchange=()=>{const arr=STATE.settings.active[x.dataset.topic],w=x.dataset.word;if(x.checked&&!arr.includes(w))arr.push(w);if(!x.checked)STATE.settings.active[x.dataset.topic]=arr.filter(v=>v!==w);saveState();render();scrollBack(x.dataset.topic)});
   document.querySelectorAll('.all').forEach(b=>b.onclick=()=>{const t=TOPICS[b.dataset.topic];STATE.settings.active[t.id]=t.words.map(w=>w.es);saveState();render();scrollBack(t.id)});
   document.querySelectorAll('.none').forEach(b=>b.onclick=()=>{STATE.settings.active[b.dataset.topic]=[];saveState();render();scrollBack(b.dataset.topic)});
-  document.querySelectorAll('.say').forEach(b=>b.onclick=()=>{const t=TOPICS[b.dataset.topic],w=t.words.find(x=>x.es===b.dataset.word);speak(t.id==='ser'?(w.audio||`${w.pronoun} ${w.form}`):w.es)})
+  document.querySelectorAll('.say').forEach(b=>b.onclick=()=>{const t=TOPICS[b.dataset.topic],w=t.words.find(x=>x.es===b.dataset.word);speak(t.kind==='verb'?`${w.pronoun} ${w.form}`:w.es)})
 }
 function scrollBack(id){requestAnimationFrame(()=>document.querySelector('#'+id)?.scrollIntoView({block:'nearest'}))}
 const vs=loadVoices(),sel=document.querySelector('#voiceSelect');if(vs.length){sel.innerHTML=vs.map((v,n)=>`<option value="${n}">${v.name} — ${v.lang}</option>`).join('');let ix=vs.indexOf(voice);if(ix<0)ix=0;sel.value=ix;sel.onchange=()=>{voice=vs[+sel.value];STATE.settings.voiceURI=voice?.voiceURI||'';saveState();speak('Hola')}}else{sel.innerHTML='<option>Системный голос es-ES</option>';sel.disabled=true}

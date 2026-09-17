@@ -15,9 +15,9 @@
       <div class="pron-setting-group">
         <div class="pron-group-title"><b>2. Материал</b></div>
         <div class="pron-content-options">
-          <label class="pron-radio"><input type="radio" name="pronContent" value="words"><span><b>Только слова</b><small>Отдельные слова; для SER — местоимение + форма: «Yo soy».</small></span></label>
+          <label class="pron-radio"><input type="radio" name="pronContent" value="words"><span><b>Только слова</b><small>Отдельные слова; для SER и TENER — местоимение + форма: «Yo soy», «Yo tengo».</small></span></label>
           <label class="pron-radio"><input type="radio" name="pronContent" value="basic"><span><b>Базовые фразы</b><small>Слова + короткие учебные фразы: «Hoy es lunes», «Estamos en enero».</small></span></label>
-          <label class="pron-radio"><input type="radio" name="pronContent" value="all"><span><b>Всё, включая примеры</b><small>Слова + базовые фразы + предложения из примеров, например из темы SER.</small></span></label>
+          <label class="pron-radio"><input type="radio" name="pronContent" value="all"><span><b>Всё, включая примеры</b><small>Слова + базовые фразы + предложения из примеров, например из тем SER и TENER.</small></span></label>
         </div>
       </div>
     </div>
@@ -33,13 +33,17 @@ const PRAISE=['¡Muy bien!','¡Perfecto!','¡Excelente!','¡Muy bien pronunciado
 let deck=[],index=0,current=null,recognition=null,listening=false;
 
 function strip(s){return (s||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zñü0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
-function serPronoun(w){return ({soy:'Yo',eres:'Tú',es:'Ella',somos:'Nosotros',sois:'Vosotros',son:'Ellos'})[w.es]||w.pronoun.split('/')[0].trim()}
+function verbPronoun(t,w){
+  if(t.id==='ser')return ({soy:'Yo',eres:'Tú',es:'Ella',somos:'Nosotros',sois:'Vosotros',son:'Ellos'})[w.es]||w.pronoun.split('/')[0].trim();
+  if(t.id==='tener')return ({tengo:'Yo',tienes:'Tú',tiene:'Ella',tenemos:'Nosotros',tenéis:'Vosotros',tienen:'Ellos'})[w.es]||w.pronoun.split('/')[0].trim();
+  return w.pronoun.split('/')[0].trim();
+}
 function pronCfg(){return STATE.settings.pronunciation}
 function topicChosen(id){return pronCfg().topics.includes(id)}
 
 function wordItem(t,w){
-  if(t.id==='ser'){
-    const p=serPronoun(w);return {text:`${p} ${w.form}.`,ru:`${w.ru}: форма SER — ${w.form}`,topic:t.title,kind:'слово / форма',level:'word'};
+  if(t.kind==='verb'){
+    const p=verbPronoun(t,w);return {text:`${p} ${w.form}.`,ru:`${w.ru}: форма ${t.verb} — ${w.form}`,topic:t.title,kind:'слово / форма',level:'word'};
   }
   if(t.id==='conversations')return {text:w.es,ru:w.ru,topic:t.title,kind:'фраза',level:'word'};
   return {text:w.es,ru:w.ru,topic:t.title,kind:'слово',level:'word'};
@@ -49,7 +53,7 @@ function basicItem(t,w){
   if(t.id==='colors')return {text:`El color es ${w.es}.`,ru:`Цвет — ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
   if(t.id==='weekdays')return {text:`Hoy es ${w.es}.`,ru:`Сегодня ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
   if(t.id==='months')return {text:`Estamos en ${w.es}.`,ru:`Сейчас ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
-  if(t.id==='ser')return {text:`${serPronoun(w)} ${w.form}.`,ru:`${w.ru}: ${w.form}`,topic:t.title,kind:'базовая фраза',level:'basic'};
+  if(t.kind==='verb')return {text:`${verbPronoun(t,w)} ${w.form}.`,ru:`${w.ru}: ${w.form}`,topic:t.title,kind:'базовая фраза',level:'basic'};
   if(t.id==='school')return {text:`Es ${w.es}.`,ru:`Это ${w.ru}.`,topic:t.title,kind:'базовая фраза',level:'basic'};
   return null;
 }

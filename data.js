@@ -28,7 +28,7 @@ window.TRAINER_TOPICS = {
     ]
   },
   ser:{
-    id:'ser', title:'Глагол SER', esTitle:'SER — presente', icon:'🧑‍🏫', description:'Настоящее время: местоимения, формы и простые фразы', accent:'#8067d8', kind:'ser',
+    id:'ser', title:'Глагол SER', esTitle:'SER — presente', icon:'🧑‍🏫', description:'Настоящее время: местоимения, формы и простые фразы', accent:'#8067d8', kind:'verb', verb:'SER',
     words:[
       {es:'soy',pronoun:'Yo',ru:'я',symbol:'Yo',form:'soy',audio:'Yo soy. Yo soy alumno.',exampleEs:'Yo soy alumno.',exampleRu:'Я ученик.',example2Es:'Yo soy de Madrid.',example2Ru:'Я из Мадрида.'},
       {es:'eres',pronoun:'Tú',ru:'ты',symbol:'Tú',form:'eres',audio:'Tú eres. Tú eres estudiante.',exampleEs:'Tú eres estudiante.',exampleRu:'Ты ученик / ученица.',example2Es:'Tú eres mi amigo.',example2Ru:'Ты мой друг.'},
@@ -36,6 +36,17 @@ window.TRAINER_TOPICS = {
       {es:'somos',pronoun:'Nosotros / Nosotras',ru:'мы',symbol:'Nosotros/as',form:'somos',audio:'Nosotros, nosotras: somos. Nosotros somos estudiantes.',exampleEs:'Nosotros somos estudiantes.',exampleRu:'Мы ученики.',example2Es:'Somos amigos.',example2Ru:'Мы друзья.'},
       {es:'sois',pronoun:'Vosotros / Vosotras',ru:'вы',symbol:'Vosotros/as',form:'sois',audio:'Vosotros, vosotras: sois. Vosotros sois alumnos.',exampleEs:'Vosotros sois alumnos.',exampleRu:'Вы ученики.',example2Es:'Sois mis amigos.',example2Ru:'Вы мои друзья.'},
       {es:'son',pronoun:'Ellos / Ellas / Ustedes',ru:'они / Вы',symbol:'Ellos · Uds.',form:'son',audio:'Ellos, ellas, ustedes: son. Ellos son amigos.',exampleEs:'Ellos son amigos.',exampleRu:'Они друзья.',example2Es:'Ustedes son estudiantes.',example2Ru:'Вы ученики.'}
+    ]
+  },
+  tener:{
+    id:'tener', title:'Глагол TENER', esTitle:'TENER — presente', icon:'🤲', description:'Настоящее время: tengo, tienes, tiene, tenemos, tenéis, tienen', accent:'#2f9b83', kind:'verb', verb:'TENER',
+    words:[
+      {es:'tengo',pronoun:'Yo',ru:'я',symbol:'Yo',form:'tengo',exampleEs:'Yo tengo once años.',exampleRu:'Мне 11 лет.',example2Es:'Tengo un libro.',example2Ru:'У меня есть книга.'},
+      {es:'tienes',pronoun:'Tú',ru:'ты',symbol:'Tú',form:'tienes',exampleEs:'Tú tienes una mochila.',exampleRu:'У тебя есть рюкзак.',example2Es:'Tienes un lápiz.',example2Ru:'У тебя есть карандаш.'},
+      {es:'tiene',pronoun:'Él / Ella / Usted',ru:'он / она / Вы',symbol:'Él · Ella · Ud.',form:'tiene',exampleEs:'Ella tiene un cuaderno.',exampleRu:'У неё есть тетрадь.',example2Es:'Él tiene once años.',example2Ru:'Ему 11 лет.'},
+      {es:'tenemos',pronoun:'Nosotros / Nosotras',ru:'мы',symbol:'Nosotros/as',form:'tenemos',exampleEs:'Nosotros tenemos una clase.',exampleRu:'У нас есть урок.',example2Es:'Tenemos libros.',example2Ru:'У нас есть книги.'},
+      {es:'tenéis',pronoun:'Vosotros / Vosotras',ru:'вы',symbol:'Vosotros/as',form:'tenéis',exampleEs:'Vosotros tenéis cuadernos.',exampleRu:'У вас есть тетради.',example2Es:'Tenéis una regla.',example2Ru:'У вас есть линейка.'},
+      {es:'tienen',pronoun:'Ellos / Ellas / Ustedes',ru:'они / Вы',symbol:'Ellos · Uds.',form:'tienen',exampleEs:'Ellos tienen mochilas.',exampleRu:'У них есть рюкзаки.',example2Es:'Ustedes tienen libros.',example2Ru:'У вас есть книги.'}
     ]
   },
   conversations:{

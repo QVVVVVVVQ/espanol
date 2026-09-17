@@ -1,9 +1,10 @@
 const TOPICS=window.TRAINER_TOPICS;
 const STORAGE='spanishTrainerV3';
-const CONTENT_REVISION=4;
+const CONTENT_REVISION=5;
 const REV2_ADDITIONS={colors:['los colores'],months:['Los meses del año'],conversations:['Mucho gusto','No sé','¿Cómo se llama?','Se llama...'],school:['un pupitre','una silla','una pizarra','un bolígrafo','una tiza','unas tijeras','una hoja','una escuela','un profesor','una clase','una regla','un pegamento']};
 const REV3_ADDITIONS={conversations:['¿Cuántos años tienes?','Tengo once años.'],school:['un rotulador']};
 const PRE_V4_TOPICS=['colors','weekdays','months','ser','conversations','school','adjectives'];
+const PRE_V5_TOPICS=['colors','weekdays','months','ser','conversations','school','adjectives','numerals'];
 const PRE_V2_TOPICS=['colors','weekdays','months','ser','conversations','school'];
 function defaultState(){
   const stats={}; const active={};
@@ -43,6 +44,10 @@ function loadState(){
   if(currentRevision<4){
     const selected=s.settings.pronunciation.topics||[];
     if(PRE_V4_TOPICS.every(id=>selected.includes(id))&&!selected.includes('numerals'))selected.push('numerals');
+  }
+  if(currentRevision<5){
+    const selected=s.settings.pronunciation.topics||[];
+    if(PRE_V5_TOPICS.every(id=>selected.includes(id))&&!selected.includes('tener'))selected.push('tener');
   }
   if(currentRevision<CONTENT_REVISION)s.contentRevision=CONTENT_REVISION;
   if(localStorage.getItem('coloresState') && !localStorage.getItem(STORAGE)){
