@@ -112,7 +112,7 @@ window.TRAINER_TOPICS = {
     ]
   },
   animals:{
-    id:'animals', title:'Животные', esTitle:'Los animales', icon:'🐾', description:'7 базовых названий животных', accent:'#c37a35',
+    id:'animals', title:'Животные', esTitle:'Los animales', icon:'🐾', description:'17 базовых названий животных', accent:'#c37a35',
     words:[
       {es:'una mariposa',ru:'бабочка',symbol:'🦋'},
       {es:'una rana',ru:'лягушка',symbol:'🐸'},
@@ -120,7 +120,17 @@ window.TRAINER_TOPICS = {
       {es:'un perro',ru:'собака',symbol:'🐶'},
       {es:'un gato',ru:'кошка',symbol:'🐱'},
       {es:'un pollito',ru:'цыплёнок',symbol:'🐥'},
-      {es:'un oso',ru:'медведь',symbol:'🐻'}
+      {es:'un oso',ru:'медведь',symbol:'🐻'},
+      {es:'una vaca',ru:'корова',symbol:'🐄'},
+      {es:'una cabra',ru:'коза',symbol:'🐐'},
+      {es:'una oveja',ru:'овца',symbol:'🐑'},
+      {es:'un caballo',ru:'лошадь',symbol:'🐎'},
+      {es:'una gallina',ru:'курица',symbol:'🐔'},
+      {es:'un pato',ru:'утка',symbol:'🦆'},
+      {es:'un conejo',ru:'кролик',symbol:'🐇'},
+      {es:'un burro',ru:'ослик',symbol:'🫏'},
+      {es:'un lobo',ru:'волк',symbol:'🐺'},
+      {es:'un león',ru:'лев',symbol:'🦁'}
     ]
   },
   numerals:{

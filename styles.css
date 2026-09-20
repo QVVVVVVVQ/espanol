@@ -131,3 +131,17 @@ button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!impo
 .school-svg{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.14em;overflow:visible}
 .visual-big .school-svg,.prompt-visual .school-svg{width:min(150px,38vw);height:min(150px,38vw);vertical-align:middle}
 .text-dot .school-svg{width:26px;height:26px;vertical-align:middle}
+
+
+/* v17: folder "Глаголы" */
+.topic-grid{display:block}
+.topic-section-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.topic-folder{margin-top:22px;padding:18px;border:1px solid var(--line);border-radius:24px;background:#f9f7f2}
+.topic-folder-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.topic-folder-head h2{margin:1px 0 3px;font-size:22px}
+.topic-folder-head p{margin:0;color:var(--muted);font-size:13px}
+.topic-folder-icon{width:48px;height:48px;border-radius:15px;background:#eee9ff;display:grid;place-items:center;font-size:24px;flex:0 0 auto}
+.verb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.topic-switch-group-label{align-self:center;padding:7px 8px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+@media(max-width:850px){.topic-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.topic-section-grid,.verb-grid{grid-template-columns:1fr}.topic-folder{padding:14px;border-radius:20px}}
