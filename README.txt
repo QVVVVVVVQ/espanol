@@ -85,3 +85,11 @@ v9: в разделе «Произношение» добавлены фильт
 - тема «Животные» расширена до 17 слов;
 - добавлены: una vaca, una cabra, una oveja, un caballo, una gallina, un pato, un conejo, un burro, un lobo, un león;
 - новые слова автоматически активируются у существующих пользователей.
+
+Версия 18:
+- на главной отображается только одна папка «Глаголы»; SER, TENER и ESTAR больше не показываются отдельно вне неё;
+- добавлена отдельная страница verbs.html с блоками SER, TENER и ESTAR;
+- добавлен глагол ESTAR: estoy, estás, está, estamos, estáis, están;
+- внутри «Глаголы» создана вложенная папка «Практика глаголов»;
+- практика содержит: tener hambre, tener sueño, tener frío, tener calor, tener sed, Tengo miedo, estar triste, estar contento;
+- ESTAR и практика доступны во всех обычных режимах тренажёра и в проверке произношения.

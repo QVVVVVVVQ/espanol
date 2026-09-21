@@ -15,9 +15,9 @@
       <div class="pron-setting-group">
         <div class="pron-group-title"><b>2. Материал</b></div>
         <div class="pron-content-options">
-          <label class="pron-radio"><input type="radio" name="pronContent" value="words"><span><b>Только слова</b><small>Отдельные слова; для SER и TENER — местоимение + форма: «Yo soy», «Yo tengo».</small></span></label>
+          <label class="pron-radio"><input type="radio" name="pronContent" value="words"><span><b>Только слова</b><small>Отдельные слова; для SER, TENER и ESTAR — местоимение + форма: «Yo soy», «Yo tengo».</small></span></label>
           <label class="pron-radio"><input type="radio" name="pronContent" value="basic"><span><b>Базовые фразы</b><small>Слова + короткие учебные фразы: «Hoy es lunes», «Estamos en enero».</small></span></label>
-          <label class="pron-radio"><input type="radio" name="pronContent" value="all"><span><b>Всё, включая примеры</b><small>Слова + базовые фразы + предложения из примеров, например из тем SER и TENER.</small></span></label>
+          <label class="pron-radio"><input type="radio" name="pronContent" value="all"><span><b>Всё, включая примеры</b><small>Слова + базовые фразы + предложения из примеров, например из тем SER, TENER и ESTAR.</small></span></label>
         </div>
       </div>
     </div>
@@ -36,6 +36,7 @@ function strip(s){return (s||'').toLocaleLowerCase('es').normalize('NFD').replac
 function verbPronoun(t,w){
   if(t.id==='ser')return ({soy:'Yo',eres:'Tú',es:'Ella',somos:'Nosotros',sois:'Vosotros',son:'Ellos'})[w.es]||w.pronoun.split('/')[0].trim();
   if(t.id==='tener')return ({tengo:'Yo',tienes:'Tú',tiene:'Ella',tenemos:'Nosotros',tenéis:'Vosotros',tienen:'Ellos'})[w.es]||w.pronoun.split('/')[0].trim();
+  if(t.id==='estar')return ({estoy:'Yo',estás:'Tú',está:'Ella',estamos:'Nosotros',estáis:'Vosotros',están:'Ellos'})[w.es]||w.pronoun.split('/')[0].trim();
   return w.pronoun.split('/')[0].trim();
 }
 function pronCfg(){return STATE.settings.pronunciation}
@@ -45,7 +46,7 @@ function wordItem(t,w){
   if(t.kind==='verb'){
     const p=verbPronoun(t,w);return {text:`${p} ${w.form}.`,ru:`${w.ru}: форма ${t.verb} — ${w.form}`,topic:t.title,kind:'слово / форма',level:'word'};
   }
-  if(t.id==='conversations')return {text:w.es,ru:w.ru,topic:t.title,kind:'фраза',level:'word'};
+  if(t.id==='conversations'||t.id==='verb_practice')return {text:w.es,ru:w.ru,topic:t.title,kind:'фраза',level:'word'};
   return {text:w.es,ru:w.ru,topic:t.title,kind:'слово',level:'word'};
 }
 function basicItem(t,w){

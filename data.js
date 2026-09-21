@@ -49,6 +49,30 @@ window.TRAINER_TOPICS = {
       {es:'tienen',pronoun:'Ellos / Ellas / Ustedes',ru:'они / Вы',symbol:'Ellos · Uds.',form:'tienen',exampleEs:'Ellos tienen mochilas.',exampleRu:'У них есть рюкзаки.',example2Es:'Ustedes tienen libros.',example2Ru:'У вас есть книги.'}
     ]
   },
+  estar:{
+    id:'estar', title:'Глагол ESTAR', esTitle:'ESTAR — presente', icon:'📍', description:'Настоящее время: estoy, estás, está, estamos, estáis, están', accent:'#4b87c8', kind:'verb', verb:'ESTAR',
+    words:[
+      {es:'estoy',pronoun:'Yo',ru:'я',symbol:'Yo',form:'estoy',exampleEs:'Yo estoy contento.',exampleRu:'Я весёлый / довольный.',example2Es:'Estoy bien.',example2Ru:'Я в порядке.'},
+      {es:'estás',pronoun:'Tú',ru:'ты',symbol:'Tú',form:'estás',exampleEs:'Tú estás triste.',exampleRu:'Ты грустный / грустная.',example2Es:'Estás en casa.',example2Ru:'Ты дома.'},
+      {es:'está',pronoun:'Él / Ella / Usted',ru:'он / она / Вы',symbol:'Él · Ella · Ud.',form:'está',exampleEs:'Ella está en la escuela.',exampleRu:'Она в школе.',example2Es:'Ella está triste.',example2Ru:'Она грустная.'},
+      {es:'estamos',pronoun:'Nosotros / Nosotras',ru:'мы',symbol:'Nosotros/as',form:'estamos',exampleEs:'Nosotros estamos en clase.',exampleRu:'Мы в классе / на уроке.',example2Es:'Estamos juntos.',example2Ru:'Мы вместе.'},
+      {es:'estáis',pronoun:'Vosotros / Vosotras',ru:'вы',symbol:'Vosotros/as',form:'estáis',exampleEs:'Vosotros estáis aquí.',exampleRu:'Вы здесь.',example2Es:'Estáis en la escuela.',example2Ru:'Вы в школе.'},
+      {es:'están',pronoun:'Ellos / Ellas / Ustedes',ru:'они / Вы',symbol:'Ellos · Uds.',form:'están',exampleEs:'Ellos están contentos.',exampleRu:'Они весёлые / довольны.',example2Es:'Ustedes están aquí.',example2Ru:'Вы здесь.'}
+    ]
+  },
+  verb_practice:{
+    id:'verb_practice', title:'Фразы', esTitle:'Práctica de verbos', icon:'💬', description:'8 полезных выражений с TENER и ESTAR', accent:'#c06d40', kind:'phrases',
+    words:[
+      {es:'tener hambre',ru:'хотеть есть',symbol:'🍽️'},
+      {es:'tener sueño',ru:'хотеть спать',symbol:'😴'},
+      {es:'tener frío',ru:'холодно',symbol:'🥶'},
+      {es:'tener calor',ru:'жарко',symbol:'🥵'},
+      {es:'tener sed',ru:'хотеть пить',symbol:'🥤'},
+      {es:'Tengo miedo.',ru:'я боюсь',symbol:'😨'},
+      {es:'estar triste',ru:'быть грустным',symbol:'😢'},
+      {es:'estar contento',ru:'быть весёлым',symbol:'😊'}
+    ]
+  },
   conversations:{
     id:'conversations', title:'Беседы', esTitle:'Conversaciones', icon:'💬', description:'19 фраз: приветствия, знакомство и простое общение', accent:'#28a67a', kind:'phrases',
     words:[
