@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тренажёр — Español</title><link rel="stylesheet" href="styles.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тренажёр — Español</title><link rel="stylesheet" href="styles-v19.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
 <div class="shell">
 <header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="index.html">←</a><div class="appbar-title"><h1 id="topicTitle">Тема</h1><small id="topicEs"></small></div></div><div class="appbar-actions"><a class="iconbtn" href="pronunciation.html">🗣 Произношение</a><a class="iconbtn" id="settingsLink" href="settings.html">⚙ Настройки</a></div></header>
 <section class="topic-switcher" aria-label="Выбор темы">
@@ -12,13 +12,13 @@
     <a class="topic-switch" data-topic-link="adjectives" href="trainer.html?topic=adjectives">🙂 <span>Прилагательные</span></a>
     <a class="topic-switch" data-topic-link="numerals" href="trainer.html?topic=numerals">🔢 <span>Числительные</span></a>
     <a class="topic-switch" data-topic-link="animals" href="trainer.html?topic=animals">🐾 <span>Животные</span></a>
-    <a class="topic-switch" href="verbs.html">🧩 <span>Глаголы</span></a>
+    <a class="topic-switch" id="verbsFolderLink" href="verbs.html">🧩 <span>Глаголы</span></a>
   </div>
 </section>
 <nav class="modebar"><button class="mode-tab active" data-mode="study">🃏 Карточки</button><button class="mode-tab" data-mode="quiz">🎯 Тест</button><button class="mode-tab" data-mode="listen">🎧 На слух</button><button class="mode-tab" data-mode="dictation">✍️ Диктант</button><button class="mode-tab" data-mode="speed">⚡ 60 сек</button><button class="mode-tab" data-mode="match">🧩 Пары</button></nav>
 <main class="workspace"><div class="workspace-head"><div><h2 id="modeTitle"></h2><div class="subtle" id="modeSub"></div></div><div class="workspace-head-right"><div class="subtle" id="counter"></div><div class="workspace-actions" id="headActions"></div></div></div><div class="progress"><div id="progressBar"></div></div><div id="content"></div></main>
 </div><div id="toast" class="toast"></div>
-<script src="data.js"></script><script src="common.js"></script><script>
+<script src="data-v19.js"></script><script src="common-v19.js"></script><script>
 const topic=TOPICS[getTopicId()]||TOPICS.colors;
 const content=document.querySelector('#content');
 let mode='study',current=null,round=0,speedTimer=null,speedTime=60,speedScore=0,matchFirst=null,matchLock=false,footerPronTarget='';
@@ -84,6 +84,8 @@ document.querySelector('#topicTitle').textContent=topic.title;
 document.querySelector('#topicEs').textContent=topic.esTitle;
 document.querySelector('#settingsLink').href='settings.html?topic='+topic.id;
 document.querySelectorAll('[data-topic-link]').forEach(a=>a.classList.toggle('active',a.dataset.topicLink===topic.id));
+const inVerbs=topic.kind==='verb'||topic.id==='verb_practice';
+if(inVerbs){document.querySelector('.appbar .back').href='verbs.html';document.querySelector('#verbsFolderLink')?.classList.add('active')}
 
 function meta(t,s,c='',p=0){
   stopPronunciationCheck();footerPronTarget='';

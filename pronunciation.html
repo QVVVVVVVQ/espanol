@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Произношение — Español</title><link rel="stylesheet" href="styles.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Произношение — Español</title><link rel="stylesheet" href="styles-v19.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
 <div class="shell">
 <header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="index.html">←</a><div class="appbar-title"><h1>Произношение</h1><small>слова и фразы из выбранных тем</small></div></div><div class="appbar-actions"><a class="iconbtn" href="settings.html">⚙ Общие настройки</a><a class="iconbtn" href="index.html">⌂ Главная</a></div></header>
 <main class="workspace pronunciation-workspace">
@@ -15,7 +15,7 @@
       <div class="pron-setting-group">
         <div class="pron-group-title"><b>2. Материал</b></div>
         <div class="pron-content-options">
-          <label class="pron-radio"><input type="radio" name="pronContent" value="words"><span><b>Только слова</b><small>Отдельные слова; для SER, TENER и ESTAR — местоимение + форма: «Yo soy», «Yo tengo».</small></span></label>
+          <label class="pron-radio"><input type="radio" name="pronContent" value="words"><span><b>Только слова</b><small>Отдельные слова; для SER, TENER и ESTAR — местоимение + форма: «Yo soy», «Yo tengo», «Yo estoy».</small></span></label>
           <label class="pron-radio"><input type="radio" name="pronContent" value="basic"><span><b>Базовые фразы</b><small>Слова + короткие учебные фразы: «Hoy es lunes», «Estamos en enero».</small></span></label>
           <label class="pron-radio"><input type="radio" name="pronContent" value="all"><span><b>Всё, включая примеры</b><small>Слова + базовые фразы + предложения из примеров, например из тем SER, TENER и ESTAR.</small></span></label>
         </div>
@@ -27,7 +27,7 @@
   <div id="practice"></div>
 </main>
 </div><div id="toast" class="toast"></div>
-<script src="data.js"></script><script src="common.js"></script><script>
+<script src="data-v19.js"></script><script src="common-v19.js"></script><script>
 const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
 const PRAISE=['¡Muy bien!','¡Perfecto!','¡Excelente!','¡Muy bien pronunciado!'];
 let deck=[],index=0,current=null,recognition=null,listening=false;
