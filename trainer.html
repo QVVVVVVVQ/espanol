@@ -1,4 +1,4 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тренажёр — Español</title><link rel="stylesheet" href="styles-v21.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тренажёр — Español</title><link rel="stylesheet" href="styles-v22.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
 <div class="shell">
 <header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="index.html">←</a><div class="appbar-title"><h1 id="topicTitle">Тема</h1><small id="topicEs"></small></div></div><div class="appbar-actions"><a class="iconbtn" href="pronunciation.html">🗣 Произношение</a><a class="iconbtn" id="settingsLink" href="settings.html">⚙ Настройки</a></div></header>
 <section class="topic-switcher" aria-label="Выбор темы">
@@ -18,7 +18,7 @@
 <nav class="modebar"><button class="mode-tab verb-only-mode" data-mode="verbOverview">📚 Изучение</button><button class="mode-tab active" data-mode="study">🃏 Карточки</button><button class="mode-tab" data-mode="quiz">🎯 Тест</button><button class="mode-tab" data-mode="listen">🎧 На слух</button><button class="mode-tab" data-mode="dictation">✍️ Диктант</button><button class="mode-tab" data-mode="speed">⚡ 60 сек</button><button class="mode-tab" data-mode="match">🧩 Пары</button></nav>
 <main class="workspace"><div class="workspace-head"><div><h2 id="modeTitle"></h2><div class="subtle" id="modeSub"></div></div><div class="workspace-head-right"><div class="subtle" id="counter"></div><div class="workspace-actions" id="headActions"></div></div></div><div class="progress"><div id="progressBar"></div></div><div id="content"></div></main>
 </div><div id="toast" class="toast"></div>
-<script src="data-v21.js"></script><script src="common-v21.js"></script><script>
+<script src="data-v22.js"></script><script src="common-v22.js"></script><script>
 const topic=TOPICS[getTopicId()]||TOPICS.colors;
 const content=document.querySelector('#content');
 let mode='study',current=null,round=0,speedTimer=null,speedTime=60,speedScore=0,matchFirst=null,matchLock=false,footerPronTarget='';
@@ -101,7 +101,15 @@ function active(){
 }
 function speechText(w){return isVerb?`${w.pronoun} ${w.form}`:w.es}
 function looseAnswer(s){return (s||'').toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zñü0-9\s]/g,' ').replace(/\s+/g,' ').trim()}
-function mainEs(w){if(isVerb)return `${w.pronoun} <span class="ser-form">${w.form}</span>`;return `${w.es}${w.hint?`<span class="pron-hint">${w.hint}</span>`:''}`}
+const FIRST_CONJ_ENDINGS=['o','as','a','amos','áis','an'];
+function verbFormMarkup(w){
+  if(!isVerb||topic.conjugation!==1)return w.form;
+  const i=topic.words.indexOf(w),ending=FIRST_CONJ_ENDINGS[i]||'';
+  if(!ending||!w.form.endsWith(ending))return w.form;
+  const stem=w.form.slice(0,-ending.length);
+  return `${stem}<span class="verb-ending">${ending}</span>`;
+}
+function mainEs(w){if(isVerb)return `${w.pronoun} <span class="ser-form">${verbFormMarkup(w)}</span>`;return `${w.es}${w.hint?`<span class="pron-hint">${w.hint}</span>`:''}`}
 function exampleBlock(w,cls=''){
   if(!isVerb)return '';
   return `<div class="examples ${cls}"><div class="examples-title">Примеры · нажми 🔊, чтобы послушать</div>
@@ -111,7 +119,7 @@ function exampleBlock(w,cls=''){
 function bindExampleButtons(w,root=document){if(!isVerb)return;root.querySelectorAll('.example-speak').forEach(btn=>btn.onclick=()=>speak(btn.dataset.example==='2'?w.example2Es:w.exampleEs))}
 function visual(w,large=false){
   if(topic.id==='colors')return `<div class="${large?'prompt-visual':'visual'}" style="background:${w.hex};color:${w.fg};${w.es==='blanco'?'box-shadow:inset 0 0 0 1px #ddd':''}">${large?'':`<span class="badge">${topic.icon}</span>`}</div>`;
-  if(isVerb){if(large)return `<div class="prompt-visual grammar-prompt"><div class="grammar-pronoun">${w.pronoun}</div><div class="grammar-ru">${w.ru}</div></div>`;return `<div class="visual grammar-visual"><span class="badge">${verbName} · presente</span><div class="grammar-pair"><span>${w.pronoun}</span><i>→</i><strong>${w.form}</strong></div></div>`}
+  if(isVerb){if(large)return `<div class="prompt-visual grammar-prompt"><div class="grammar-pronoun">${w.pronoun}</div><div class="grammar-ru">${w.ru}</div></div>`;return `<div class="visual grammar-visual"><span class="badge">${verbName} · presente</span><div class="grammar-pair"><span>${w.pronoun}</span><i>→</i><strong>${verbFormMarkup(w)}</strong></div></div>`}
   return `<div class="${large?'prompt-visual':'visual'}">${large?`<strong>${w.symbol}</strong>`:`<span class="badge">${topic.icon}</span><div class="visual-big visual-word">${w.symbol}</div>`}</div>`;
 }
 function makeOptions(correct){const a=active()||[];let others=shuffle(a.filter(x=>x.es!==correct.es)).slice(0,3);if(others.length<3)others=others.concat(shuffle(topic.words.filter(x=>x.es!==correct.es&&!others.some(y=>y.es===x.es))).slice(0,3-others.length));return shuffle([correct,...others])}
@@ -159,7 +167,7 @@ function renderVerbOverview(){
   if(!isVerb){renderStudy();return}
   const forms=topic.words.slice(0,6);
   meta('Изучение',`Все 6 форм глагола ${verbName}`,'6 форм',100);
-  content.innerHTML=`<section class="verb-overview"><div class="verb-overview-top"><div><span class="verb-overview-badge">${verbName} · presente</span><h3>Все формы сразу</h3><p>Смотри на спряжение целиком. Кнопка озвучивает только формы — без местоимений.</p></div><button class="verb-speak-all" id="speakAllVerbForms">🔊 <span>Озвучить 6 форм</span></button></div><div class="verb-form-grid">${forms.map((w,i)=>`<article class="verb-form-card"><span class="verb-form-num">${i+1}</span><span class="verb-form-pronoun">${w.pronoun}</span><strong>${w.form}</strong><small>${w.ru}</small></article>`).join('')}</div><div class="verb-audio-order"><b>Порядок озвучки:</b> ${forms.map(w=>w.form).join(' · ')}</div></section>`;
+  content.innerHTML=`<section class="verb-overview"><div class="verb-overview-top"><div><span class="verb-overview-badge">${verbName} · presente</span><h3>Все формы сразу</h3><p>Смотри на спряжение целиком. Кнопка озвучивает только формы — без местоимений.${topic.conjugation===1?` <span class="ending-help">Цветом выделены изменяющиеся окончания.</span>`:''}</p></div><button class="verb-speak-all" id="speakAllVerbForms">🔊 <span>Озвучить 6 форм</span></button></div><div class="verb-form-grid">${forms.map((w,i)=>`<article class="verb-form-card"><span class="verb-form-num">${i+1}</span><span class="verb-form-pronoun">${w.pronoun}</span><strong>${verbFormMarkup(w)}</strong><small>${w.ru}</small></article>`).join('')}</div><div class="verb-audio-order"><b>Порядок озвучки:</b> ${forms.map(w=>w.form).join(' · ')}</div></section>`;
   document.querySelector('#speakAllVerbForms').onclick=()=>speakFormSequence(forms.map(w=>w.form));
 }
 
