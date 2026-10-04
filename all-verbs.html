@@ -1,0 +1,23 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Все глаголы — Español</title><link rel="stylesheet" href="styles-v23.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<div class="shell">
+<header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="verbs.html">←</a><div class="logo">E</div><div class="appbar-title"><h1>Все глаголы</h1><small>школьный тренажёр · версия 23</small></div></div><div class="appbar-actions"><a class="iconbtn" href="pronunciation.html">🗣 Произношение</a><a class="iconbtn" href="settings.html">⚙ Настройки</a></div></header>
+<h1 class="page-title">Все глаголы</h1>
+<p class="page-sub">Слева — неопределённая форма и перевод. Справа — все шесть форм настоящего времени.</p>
+<div class="folder-back-note">📁 <a href="index.html">Главная</a><span>›</span><a href="verbs.html">Глаголы</a><span>›</span><b>Все глаголы</b></div>
+<section class="all-verbs-table" id="allVerbs"></section>
+</div><div id="toast" class="toast"></div>
+<script src="data-v23.js"></script><script src="common-v23.js"></script><script>
+const ORDER=['ser','tener','estar','jugar','dibujar','cantar','trabajar','bailar','estudiar','saltar','comer','beber','leer','aprender','vivir','escribir'];
+const PRON=['yo','tú','él / ella / Ud.','nosotros/as','vosotros/as','ellos / Uds.'];
+const ENDINGS={1:['o','as','a','amos','áis','an'],2:['o','es','e','emos','éis','en'],3:['o','es','e','imos','ís','en']};
+function formMarkup(t,w,i){
+  const endings=ENDINGS[t.conjugation];if(!endings)return w.form;
+  const e=endings[i]||'';if(!e||!w.form.endsWith(e))return w.form;
+  return w.form.slice(0,-e.length)+`<span class="verb-ending">${e}</span>`;
+}
+function row(t){
+  const forms=t.words.slice(0,6);
+  return `<article class="all-verb-row"><div class="all-verb-left"><span class="verb-overview-badge">${t.conjugation?`${t.conjugation} спряжение`:'основной'}</span><h2>${t.infinitive||t.id}</h2><p>${t.infinitiveRu||t.title}</p><a href="trainer.html?topic=${t.id}&mode=verbOverview">Открыть изучение →</a></div><div class="all-verb-forms">${forms.map((w,i)=>`<div class="all-verb-form"><small>${PRON[i]}</small><b>${formMarkup(t,w,i)}</b></div>`).join('')}</div></article>`;
+}
+document.querySelector('#allVerbs').innerHTML=ORDER.map(id=>TOPICS[id]).filter(Boolean).map(row).join('');
+</script></body></html>
