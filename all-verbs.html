@@ -1,12 +1,17 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Все глаголы — Español</title><link rel="stylesheet" href="styles-v25.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Все глаголы — Español</title><link rel="stylesheet" href="styles-v26.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
 <div class="shell">
-<header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="verbs.html">←</a><div class="logo">E</div><div class="appbar-title"><h1>Все глаголы</h1><small>школьный тренажёр · версия 25</small></div></div><div class="appbar-actions"><a class="iconbtn" href="pronunciation.html">🗣 Произношение</a><a class="iconbtn" href="settings.html">⚙ Настройки</a></div></header>
+<header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="verbs.html">←</a><div class="logo">E</div><div class="appbar-title"><h1>Все глаголы</h1><small>школьный тренажёр · версия 26</small></div></div><div class="appbar-actions"><a class="iconbtn" href="pronunciation.html">🗣 Произношение</a><a class="iconbtn" href="settings.html">⚙ Настройки</a></div></header>
 <h1 class="page-title">Все глаголы</h1>
 <p class="page-sub">Слева — неопределённая форма и перевод. Справа — все шесть форм настоящего времени.</p>
 <div class="folder-back-note">📁 <a href="index.html">Главная</a><span>›</span><a href="verbs.html">Глаголы</a><span>›</span><b>Все глаголы</b></div>
+<nav class="conj-quick-nav" aria-label="Быстрый переход по спряжениям">
+  <a class="conj-jump conj-1" href="#conj-1"><b>1-е спряжение</b><span>-ar</span></a>
+  <a class="conj-jump conj-2" href="#conj-2"><b>2-е спряжение</b><span>-er</span></a>
+  <a class="conj-jump conj-3" href="#conj-3"><b>3-е спряжение</b><span>-ir</span></a>
+</nav>
 <section class="all-verbs-table" id="allVerbs"></section>
 </div><div id="toast" class="toast"></div>
-<script src="data-v25.js"></script><script src="common-v25.js"></script><script>
+<script src="data-v26.js"></script><script src="common-v26.js"></script><script>
 const ORDER=['ser','tener','estar','jugar','dibujar','cantar','trabajar','bailar','estudiar','saltar','comer','beber','leer','aprender','vivir','escribir'];
 const PRON=['yo','tú','él / ella / Ud.','nosotros/as','vosotros/as','ellos / Uds.'];
 const ENDINGS={1:['o','as','a','amos','áis','an'],2:['o','es','e','emos','éis','en'],3:['o','es','e','imos','ís','en']};
@@ -21,10 +26,17 @@ function infinitiveMarkup(t){
   const ending=inf.slice(-2),stem=inf.slice(0,-2);
   return `${stem}<span class="infinitive-ending">${ending}</span>`;
 }
+const SEEN_CONJ=new Set();
+const CONJ_NAMES={1:'1-е спряжение · -ar',2:'2-е спряжение · -er',3:'3-е спряжение · -ir'};
 function row(t){
   const forms=t.words.slice(0,6);
   const conjClass=t.conjugation?`conj-${t.conjugation}`:'conj-main';
-  return `<article class="all-verb-row ${conjClass}"><div class="all-verb-left"><span class="verb-overview-badge">${t.conjugation?`${t.conjugation} спряжение`:'основной'}</span><h2>${infinitiveMarkup(t)}</h2><p>${t.infinitiveRu||t.title}</p><a href="trainer.html?topic=${t.id}&mode=verbOverview">Открыть изучение →</a></div><div class="all-verb-forms">${forms.map((w,i)=>`<div class="all-verb-form"><small>${PRON[i]}</small><b>${formMarkup(t,w,i)}</b></div>`).join('')}</div></article>`;
+  let group='';
+  if(t.conjugation&&!SEEN_CONJ.has(t.conjugation)){
+    SEEN_CONJ.add(t.conjugation);
+    group=`<div class="conj-section-marker ${conjClass}" id="conj-${t.conjugation}"><span>${CONJ_NAMES[t.conjugation]}</span></div>`;
+  }
+  return `${group}<article class="all-verb-row ${conjClass}"><div class="all-verb-left"><span class="verb-overview-badge">${t.conjugation?`${t.conjugation} спряжение`:'основной'}</span><h2>${infinitiveMarkup(t)}</h2><p>${t.infinitiveRu||t.title}</p><a href="trainer.html?topic=${t.id}&mode=verbOverview">Открыть изучение →</a></div><div class="all-verb-forms">${forms.map((w,i)=>`<div class="all-verb-form"><small>${PRON[i]}</small><b>${formMarkup(t,w,i)}</b></div>`).join('')}</div></article>`;
 }
 document.querySelector('#allVerbs').innerHTML=ORDER.map(id=>TOPICS[id]).filter(Boolean).map(row).join('');
 </script></body></html>
