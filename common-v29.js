@@ -1,6 +1,6 @@
 const TOPICS=window.TRAINER_TOPICS;
 const STORAGE='spanishTrainerV3';
-const CONTENT_REVISION=16;
+const CONTENT_REVISION=15;
 const REV2_ADDITIONS={colors:['los colores'],months:['Los meses del año'],conversations:['Mucho gusto','No sé','¿Cómo se llama?','Se llama...'],school:['un pupitre','una silla','una pizarra','un bolígrafo','una tiza','unas tijeras','una hoja','una escuela','un profesor','una clase','una regla','un pegamento']};
 const REV3_ADDITIONS={conversations:['¿Cuántos años tienes?','Tengo once años.'],school:['un rotulador']};
 const REV7_ADDITIONS={animals:['una vaca','una cabra','una oveja','un caballo','una gallina','un pato','un conejo','un burro','un lobo','un león']};
@@ -15,7 +15,6 @@ const PRE_V21_TOPICS=['colors','weekdays','months','ser','tener','estar','verb_p
 const PRE_V22_TOPICS=['colors','weekdays','months','ser','tener','estar','estudiar','trabajar','verb_practice','conversations','school','adjectives','animals','numerals'];
 const PRE_V23_TOPICS=["colors", "weekdays", "months", "ser", "tener", "estar", "jugar", "dibujar", "cantar", "bailar", "estudiar", "trabajar", "verb_practice", "conversations", "school", "adjectives", "animals", "numerals"];
 const REV15_HOME_ADDITIONS=["el techo", "el lavabo", "el fregadero", "el suelo", "la pared", "el frigorífico", "la cama", "la estantería", "el armario", "el sillón", "la lavadora", "la habitación", "la mesa de estudio", "el ordenador", "los libros", "Aquí hay...", "Mira mi habitación.", "Es pequeña pero muy bonita.", "En la estantería tengo los libros.", "Al lado está el armario.", "Sobre la mesa de estudio tengo el ordenador."];
-const REV16_HOME_ADDITIONS=["los muebles", "hay", "está", "están", "pequeña", "bonita", "al lado", "sobre", "¡Qué bonita!", "En la estantería tengo los libros y al lado está el armario."];
 const PRE_V28_TOPICS=["colors", "weekdays", "months", "ser", "tener", "estar", "jugar", "dibujar", "cantar", "bailar", "estudiar", "trabajar", "saltar", "comer", "beber", "leer", "aprender", "vivir", "escribir", "verb_practice", "conversations", "school", "adjectives", "animals", "furniture", "prepositions", "numerals"];
 const PRE_V2_TOPICS=['colors','weekdays','months','ser','conversations','school'];
 function defaultState(){
@@ -130,14 +129,6 @@ function loadState(){
     if(TOPICS.my_home){
       const arr=s.settings.active.my_home||(s.settings.active.my_home=[]);
       REV15_HOME_ADDITIONS.forEach(word=>{
-        if(TOPICS.my_home.words.some(w=>w.es===word)&&!arr.includes(word))arr.push(word);
-      });
-    }
-  }
-  if(currentRevision<16){
-    if(TOPICS.my_home){
-      const arr=s.settings.active.my_home||(s.settings.active.my_home=[]);
-      REV16_HOME_ADDITIONS.forEach(word=>{
         if(TOPICS.my_home.words.some(w=>w.es===word)&&!arr.includes(word))arr.push(word);
       });
     }

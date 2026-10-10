@@ -336,7 +336,7 @@ window.TRAINER_TOPICS = {
     ]
   },
   my_home:{
-    id:'my_home', title:'Мой дом', esTitle:'Mi casa', icon:'🏠', description:'58 слов и выражений по уроку «Mi casa» и фотографии учебника', accent:'#d9794f',
+    id:'my_home', title:'Мой дом', esTitle:'Mi casa', icon:'🏠', description:'48 слов и выражений о доме, комнатах и рассказе о своём доме', accent:'#d9794f',
     words:[
       {es:'la casa',ru:'дом',symbol:'🏠'},
       {es:'el piso',ru:'квартира',symbol:'🏢'},
@@ -385,17 +385,7 @@ window.TRAINER_TOPICS = {
       {es:'Es pequeña pero muy bonita.',ru:'Она маленькая, но очень красивая.',symbol:'✨',phrase:true},
       {es:'En la estantería tengo los libros.',ru:'На полке у меня книги.',symbol:'📚',phrase:true},
       {es:'Al lado está el armario.',ru:'Рядом находится шкаф.',symbol:'↔️',phrase:true},
-      {es:'Sobre la mesa de estudio tengo el ordenador.',ru:'На письменном столе у меня компьютер.',symbol:'💻',phrase:true},
-      {es:'los muebles',ru:'мебель',symbol:'🛋️'},
-      {es:'hay',ru:'есть / имеется',symbol:'📍'},
-      {es:'está',ru:'находится',symbol:'📍'},
-      {es:'están',ru:'находятся',symbol:'📍'},
-      {es:'pequeña',ru:'маленькая',symbol:'📏'},
-      {es:'bonita',ru:'красивая',symbol:'✨'},
-      {es:'al lado',ru:'рядом',symbol:'↔️'},
-      {es:'sobre',ru:'на / над',symbol:'⬆️'},
-      {es:'¡Qué bonita!',ru:'Какая красивая!',symbol:'✨',phrase:true},
-      {es:'En la estantería tengo los libros y al lado está el armario.',ru:'На полке у меня книги, а рядом находится шкаф.',symbol:'📚',phrase:true}
+      {es:'Sobre la mesa de estudio tengo el ordenador.',ru:'На письменном столе у меня компьютер.',symbol:'💻',phrase:true}
     ]
   },
   furniture:{

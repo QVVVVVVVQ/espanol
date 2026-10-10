@@ -1,6 +1,6 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тест глаголов — Español</title><link rel="stylesheet" href="styles-v28.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Тест глаголов — Español</title><link rel="stylesheet" href="styles-v30.css"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f5f3ee"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Espanol"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png"><script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});</script></head><body>
 <div class="shell">
-<header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="verbs.html">←</a><div class="logo">E</div><div class="appbar-title"><h1>Тест глаголов</h1><small>школьный тренажёр · версия 28</small></div></div><div class="appbar-actions"><a class="iconbtn" href="all-verbs.html">📋 Все глаголы</a><a class="iconbtn" href="settings.html">⚙ Настройки</a></div></header>
+<header class="appbar"><div class="appbar-left"><a class="ghostbtn back" href="verbs.html">←</a><div class="logo">E</div><div class="appbar-title"><h1>Тест глаголов</h1><small>школьный тренажёр · версия 30</small></div></div><div class="appbar-actions"><a class="iconbtn" href="all-verbs.html">📋 Все глаголы</a><a class="iconbtn" href="settings.html">⚙ Настройки</a></div></header>
 <div class="folder-back-note">📁 <a href="index.html">Главная</a><span>›</span><a href="verbs.html">Глаголы</a><span>›</span><b>Тест инфинитивов</b></div>
 <main class="verb-inf-test-shell">
   <section class="verb-inf-test-head">
@@ -11,7 +11,7 @@
   <section class="verb-inf-question" id="question"></section>
 </main>
 </div><div id="toast" class="toast"></div>
-<script src="data-v28.js"></script><script src="common-v28.js"></script><script>
+<script src="data-v30.js"></script><script src="common-v30.js"></script><script>
 const VERB_IDS=['ser','tener','estar','jugar','dibujar','cantar','trabajar','bailar','estudiar','saltar','comer','beber','leer','aprender','vivir','escribir'];
 const VERBS=VERB_IDS.map(id=>TOPICS[id]).filter(t=>t&&t.kind==='verb'&&t.infinitive);
 const question=document.querySelector('#question'),counter=document.querySelector('#counter'),progress=document.querySelector('#verbInfProgress');

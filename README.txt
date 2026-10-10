@@ -166,3 +166,17 @@ v9: в разделе «Произношение» добавлены фильт
 - добавлены выражения: Esta es mi casa; ¿Dónde vives?; Vivo en una casa; Vivo en un piso; ¿Cómo es tu casa?; Mi casa es grande/pequeña; вопросы и ответы о количестве комнат и любимой комнате;
 - урок доступен во всех стандартных режимах тренажёра и в разделе «Произношение»;
 - мобильная версия использует существующую адаптивную механику карточек и тестов.
+
+Версия 29:
+- урок «Мой дом / Mi casa» расширен с 27 до 48 карточек;
+- добавлены 15 слов с фотографии: el techo, el lavabo, el fregadero, el suelo, la pared, el frigorífico, la cama, la estantería, el armario, el sillón, la lavadora, la habitación, la mesa de estudio, el ordenador, los libros;
+- добавлены 6 выражений с фотографии: Aquí hay..., Mira mi habitación., Es pequeña pero muy bonita., En la estantería tengo los libros., Al lado está el armario., Sobre la mesa de estudio tengo el ordenador.;
+- новые элементы автоматически активируются у существующих пользователей без сброса прогресса.
+
+Версия 30:
+- повторно и полностью сверен урок «Мой дом / Mi casa» с фотографиями учебника;
+- подтверждено наличие el pasillo — коридор;
+- добавлены ранее не вынесенные в отдельные карточки элементы: los muebles, hay, está, están, pequeña, bonita, al lado, sobre, ¡Qué bonita!;
+- добавлена точная полная фраза из текста: «En la estantería tengo los libros y al lado está el armario.»;
+- урок теперь содержит 58 карточек;
+- новые карточки автоматически включаются у пользователей v29 без сброса прогресса.
