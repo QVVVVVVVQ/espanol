@@ -404,3 +404,28 @@ body.verb-conj-3 .grammar-match .verb-ending{color:var(--verb-conj-color)!import
 /* v28: Mi casa */
 .home-icon{background:#fff0e7}
 .topic-card .home-icon{font-size:35px}
+
+
+/* v31: Mi casa continuous learning */
+.home-overview{max-width:1000px;margin:10px auto 0}
+.home-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.home-overview-card{position:relative;min-width:0;min-height:112px;border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px 34px 14px 14px;text-align:left;font:inherit;color:inherit;cursor:pointer;transition:.15s}
+.home-overview-card:hover{transform:translateY(-1px);border-color:#d4a087;box-shadow:0 5px 16px rgba(0,0,0,.05)}
+.home-overview-card strong{display:block;font-size:20px;line-height:1.15;overflow-wrap:anywhere}
+.home-overview-card small{display:block;margin-top:7px;color:var(--muted);font-size:12px;line-height:1.35}
+.home-overview-card i{position:absolute;right:12px;bottom:12px;font-style:normal}
+.home-overview-num{position:absolute;right:11px;top:9px;color:#aaa39a;font-size:10px;font-weight:900}
+.home-overview-card.is-phrase{grid-column:1/-1;min-height:auto;background:#fff6f3}
+.home-overview-card.is-phrase strong{font-size:17px;line-height:1.45;padding-right:12px}
+@media(max-width:760px){
+  .home-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+  .home-overview-top{align-items:stretch;flex-direction:column}
+  .home-overview-top .verb-speak-all{width:100%;justify-content:center}
+  .home-overview-grid{grid-template-columns:1fr 1fr;gap:6px}
+  .home-overview-card{min-height:98px;padding:13px 28px 11px 11px;border-radius:15px}
+  .home-overview-card strong{font-size:16px}
+  .home-overview-card small{font-size:10px}
+  .home-overview-card.is-phrase{grid-column:1/-1}
+}
