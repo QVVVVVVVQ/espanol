@@ -439,3 +439,12 @@ body.verb-conj-3 .grammar-match .verb-ending{color:var(--verb-conj-color)!import
 @media(max-width:520px){
   .where-overview-grid{grid-template-columns:1fr 1fr}
 }
+
+
+/* v34: Russian -> Spanish playback in ¿Dónde está? overview */
+.where-overview-card.is-speaking{
+  background:#eef7ff;
+  border-color:#5a88b7;
+  box-shadow:0 0 0 3px rgba(90,136,183,.16),0 7px 20px rgba(0,0,0,.06);
+  transform:translateY(-1px);
+}
