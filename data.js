@@ -428,6 +428,25 @@ window.TRAINER_TOPICS = {
       {es:'la estantería',ru:'стеллаж / полка',symbol:'📚'}
     ]
   },
+  where_is:{
+    id:'where_is', title:'Где находится?', esTitle:'¿Dónde está?', icon:'📍', description:'14 слов и выражений: estar и расположение предметов', accent:'#5a88b7',
+    words:[
+      {es:'estar',ru:'быть, находиться',symbol:'📍',exampleEs:'La cama está en el dormitorio.',exampleRu:'Кровать находится в спальне.',example2Es:'Los libros están en la librería.',example2Ru:'Книги находятся в книжном шкафу.'},
+      {es:'está / están',ru:'находится / находятся',symbol:'📍'},
+      {es:'encima de',ru:'над',symbol:'⬆️'},
+      {es:'debajo de',ru:'под',symbol:'⬇️'},
+      {es:'a la derecha de',ru:'справа от',symbol:'➡️'},
+      {es:'a la izquierda de',ru:'слева от',symbol:'⬅️'},
+      {es:'enfrente de',ru:'перед',symbol:'↕️',hint:'frente a'},
+      {es:'detrás de',ru:'за',symbol:'↩️'},
+      {es:'lejos de',ru:'далеко от',symbol:'↔️'},
+      {es:'cerca de',ru:'близко от',symbol:'↔️'},
+      {es:'junto a',ru:'около чего-то',symbol:'📌'},
+      {es:'al lado de',ru:'сбоку от чего-то',symbol:'↔️'},
+      {es:'en el centro de',ru:'в центре чего-то',symbol:'🎯'},
+      {es:'dentro de',ru:'внутри чего-то',symbol:'📦'}
+    ]
+  },
   prepositions:{
     id:'prepositions', title:'Предлоги', esTitle:'Las preposiciones de lugar', icon:'📍', description:'12 предлогов места с предложениями и наглядными картинками', accent:'#4c86a8',
     words:[

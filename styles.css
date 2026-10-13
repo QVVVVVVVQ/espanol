@@ -429,3 +429,13 @@ body.verb-conj-3 .grammar-match .verb-ending{color:var(--verb-conj-color)!import
   .home-overview-card small{font-size:10px}
   .home-overview-card.is-phrase{grid-column:1/-1}
 }
+
+
+/* v33: ¿Dónde está? */
+.where-icon{background:#eaf3fb}
+.topic-card .where-icon{font-size:35px}
+.where-overview-grid .home-overview-card{background:#fafdff}
+.where-alt{font-size:.8em;color:#5a88b7;font-weight:850}
+@media(max-width:520px){
+  .where-overview-grid{grid-template-columns:1fr 1fr}
+}

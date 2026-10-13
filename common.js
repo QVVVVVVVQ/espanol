@@ -1,6 +1,6 @@
 const TOPICS=window.TRAINER_TOPICS;
 const STORAGE='spanishTrainerV3';
-const CONTENT_REVISION=18;
+const CONTENT_REVISION=19;
 const REV2_ADDITIONS={colors:['los colores'],months:['Los meses del año'],conversations:['Mucho gusto','No sé','¿Cómo se llama?','Se llama...'],school:['un pupitre','una silla','una pizarra','un bolígrafo','una tiza','unas tijeras','una hoja','una escuela','un profesor','una clase','una regla','un pegamento']};
 const REV3_ADDITIONS={conversations:['¿Cuántos años tienes?','Tengo once años.'],school:['un rotulador']};
 const REV7_ADDITIONS={animals:['una vaca','una cabra','una oveja','un caballo','una gallina','un pato','un conejo','un burro','un lobo','un león']};
@@ -162,6 +162,13 @@ function loadState(){
       REV18_HOME_ACTIVE_ADDITIONS.forEach(word=>{
         if(TOPICS.my_home.words.some(w=>w.es===word)&&!arr.includes(word))arr.push(word);
       });
+    }
+  }
+  if(currentRevision<19){
+    const selected=s.settings.pronunciation.topics||[];
+    const previousIds=Object.keys(TOPICS).filter(id=>id!=='where_is');
+    if(previousIds.every(id=>selected.includes(id))&&TOPICS.where_is&&!selected.includes('where_is')){
+      selected.push('where_is');
     }
   }
   if(currentRevision<CONTENT_REVISION)s.contentRevision=CONTENT_REVISION;
