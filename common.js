@@ -25,13 +25,13 @@ function defaultState(){
   const stats={}; const active={};
   Object.values(TOPICS).forEach(t=>{stats[t.id]={learned:[],correct:0,total:0,streak:0,bestStreak:0,studyIndex:0};active[t.id]=t.words.map(w=>w.es)});
   if(TOPICS.my_home)active.my_home=V32_HOME_ACTIVE_DEFAULT.filter(word=>TOPICS.my_home.words.some(w=>w.es===word));
-  return {settings:{rate:.88,autoSpeak:true,voiceURI:'',active,pronunciation:{topics:Object.keys(TOPICS),content:'all'}},stats};
+  return {settings:{rate:.88,autoSpeak:true,voiceURI:'',ruVoiceURI:'',active,pronunciation:{topics:Object.keys(TOPICS),content:'all'}},stats};
 }
 function loadState(){
   let s; try{s=JSON.parse(localStorage.getItem(STORAGE)||'null')}catch(e){}
   const d=defaultState();
   if(!s)s=d;
-  s.settings=s.settings||d.settings; s.settings.active=s.settings.active||d.settings.active; if(typeof s.settings.voiceURI!=='string')s.settings.voiceURI='';
+  s.settings=s.settings||d.settings; s.settings.active=s.settings.active||d.settings.active; if(typeof s.settings.voiceURI!=='string')s.settings.voiceURI=''; if(typeof s.settings.ruVoiceURI!=='string')s.settings.ruVoiceURI='';
   s.settings.pronunciation=Object.assign({},d.settings.pronunciation,s.settings.pronunciation||{});
   s.settings.pronunciation.topics=Array.isArray(s.settings.pronunciation.topics)?s.settings.pronunciation.topics.filter(id=>TOPICS[id]):d.settings.pronunciation.topics;
   if(!['words','basic','all'].includes(s.settings.pronunciation.content))s.settings.pronunciation.content=d.settings.pronunciation.content;

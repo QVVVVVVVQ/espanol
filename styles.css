@@ -448,3 +448,12 @@ body.verb-conj-3 .grammar-match .verb-ending{color:var(--verb-conj-color)!import
   box-shadow:0 0 0 3px rgba(90,136,183,.16),0 7px 20px rgba(0,0,0,.06);
   transform:translateY(-1px);
 }
+
+
+/* v35: Russian voice chooser for ¿Dónde está? */
+.where-russian-voice{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:12px;font-weight:850;color:var(--muted)}
+.where-russian-voice select{min-width:220px;max-width:420px;border:1px solid var(--line);border-radius:11px;background:#fff;padding:8px 10px;font:inherit;color:var(--text)}
+@media(max-width:560px){
+  .where-russian-voice{align-items:stretch;flex-direction:column;gap:5px}
+  .where-russian-voice select{width:100%;min-width:0;max-width:none}
+}
