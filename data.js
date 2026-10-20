@@ -336,10 +336,10 @@ window.TRAINER_TOPICS = {
     ]
   },
   my_home:{
-    id:'my_home', title:'Мой дом', esTitle:'Mi casa', icon:'🏠', description:'59 карточек · слова учебника и рассказ «Mi casa»', accent:'#d9794f',
+    id:'my_home', title:'Мой дом', esTitle:'Mi casa', icon:'🏠', description:'67 карточек · слова учебника и рассказ «Mi casa»', accent:'#d9794f',
     words:[
       {es:'una casa',ru:'дом',symbol:'🏠'},
-      {es:'un piso',ru:'квартира',symbol:'🏢'},
+      {es:'un piso',ru:'этаж, квартира',symbol:'🏢'},
       {es:'un salón',ru:'гостиная',symbol:'🛋️'},
       {es:'un comedor',ru:'столовая',symbol:'🍽️'},
       {es:'una cocina',ru:'кухня',symbol:'🍳'},
@@ -396,7 +396,15 @@ window.TRAINER_TOPICS = {
       {es:'sobre',ru:'на / над',symbol:'⬆️'},
       {es:'¡Qué bonita!',ru:'Какая красивая!',symbol:'✨',phrase:true},
       {es:'En la estantería tengo los libros y al lado está el armario.',ru:'На полке у меня книги, а рядом находится шкаф.',symbol:'📚',phrase:true},
-      {es:'Mira mi habitación. Es pequeña pero muy bonita. En la estantería tengo los libros y al lado está el armario. Sobre la mesa de estudio tengo el ordenador.',ru:'Посмотри на мою комнату. Она маленькая, но очень красивая. На полке у меня книги, а рядом находится шкаф. На письменном столе у меня компьютер.',symbol:'🏠',phrase:true}
+      {es:'Mira mi habitación. Es pequeña pero muy bonita. En la estantería tengo los libros y al lado está el armario. Sobre la mesa de estudio tengo el ordenador.',ru:'Посмотри на мою комнату. Она маленькая, но очень красивая. На полке у меня книги, а рядом находится шкаф. На письменном столе у меня компьютер.',symbol:'🏠',phrase:true},
+      {es:'un cuarto',ru:'комната',symbol:'🚪'},
+      {es:'una ventana',ru:'окно',symbol:'🪟'},
+      {es:'un fogón',ru:'плита',symbol:'🍳'},
+      {es:'un horno',ru:'духовка',symbol:'♨️'},
+      {es:'un lavavajillas',ru:'посудомоечная машина',symbol:'🍽️'},
+      {es:'un microondas',ru:'микроволновка',symbol:'📻'},
+      {es:'un apartamento',ru:'квартира',symbol:'🏢'},
+      {es:'un ascensor',ru:'лифт',symbol:'🛗'}
     ]
   },
   furniture:{
