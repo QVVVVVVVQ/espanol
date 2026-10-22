@@ -1,6 +1,6 @@
 const TOPICS=window.TRAINER_TOPICS;
 const STORAGE='spanishTrainerV3';
-const CONTENT_REVISION=22;
+const CONTENT_REVISION=23;
 const REV2_ADDITIONS={colors:['los colores'],months:['Los meses del año'],conversations:['Mucho gusto','No sé','¿Cómo se llama?','Se llama...'],school:['un pupitre','una silla','una pizarra','un bolígrafo','una tiza','unas tijeras','una hoja','una escuela','un profesor','una clase','una regla','un pegamento']};
 const REV3_ADDITIONS={conversations:['¿Cuántos años tienes?','Tengo once años.'],school:['un rotulador']};
 const REV7_ADDITIONS={animals:['una vaca','una cabra','una oveja','un caballo','una gallina','un pato','un conejo','un burro','un lobo','un león']};
@@ -16,7 +16,8 @@ const PRE_V22_TOPICS=['colors','weekdays','months','ser','tener','estar','estudi
 const PRE_V23_TOPICS=["colors", "weekdays", "months", "ser", "tener", "estar", "jugar", "dibujar", "cantar", "bailar", "estudiar", "trabajar", "verb_practice", "conversations", "school", "adjectives", "animals", "numerals"];
 const REV15_HOME_ADDITIONS=["el techo", "el lavabo", "el fregadero", "el suelo", "la pared", "el frigorífico", "la cama", "la estantería", "el armario", "el sillón", "la lavadora", "la habitación", "la mesa de estudio", "el ordenador", "los libros", "Aquí hay...", "Mira mi habitación.", "Es pequeña pero muy bonita.", "En la estantería tengo los libros.", "Al lado está el armario.", "Sobre la mesa de estudio tengo el ordenador."];
 const REV16_HOME_ADDITIONS=["los muebles", "hay", "está", "están", "pequeña", "bonita", "al lado", "sobre", "¡Qué bonita!", "En la estantería tengo los libros y al lado está el armario."];
-const V37_HOME_ACTIVE_DEFAULT=["un techo", "un lavabo", "un cuarto de baño", "un salón", "un fregadero", "un pasillo", "un dormitorio", "un suelo", "una pared", "un frigorífico", "Aquí hay...", "una terraza", "una cocina", "una cama", "una estantería", "un armario", "un sillón", "una lavadora", "una habitación", "Mira mi habitación. Es pequeña pero muy bonita. En la estantería tengo los libros y al lado está el armario. Sobre la mesa de estudio tengo el ordenador.", "un jardín", "un garaje", "un comedor", "un cuarto", "una ventana", "un fogón", "un horno", "un lavavajillas", "un microondas", "un apartamento", "un piso", "un ascensor"];
+const V39_HOME_ACTIVE_DEFAULT=["un techo", "un lavabo", "un cuarto de baño", "un salón", "un fregadero", "un pasillo", "un dormitorio", "un suelo", "una pared", "un frigorífico", "Aquí hay...", "una terraza", "una cocina", "una cama", "una estantería", "un armario", "un sillón", "una lavadora", "una habitación", "Mira mi habitación. Es pequeña pero muy bonita. En la estantería tengo los libros y al lado está el armario. Sobre la mesa de estudio tengo el ordenador.", "un jardín", "un garaje", "un comedor", "un cuarto", "una ventana", "un fogón", "un horno", "un lavavajillas", "un microondas", "un apartamento", "un piso", "un ascensor", "una mesa", "una silla", "un sofá", "un diván", "una mesita", "un televisor", "un ordenador", "un cuadro", "unas cortinas", "un ropero", "una lámpara", "una bañera", "una ducha", "un espejo", "una alfombra"];
+const REV23_HOME_FURNITURE=["una mesa", "una silla", "un sofá", "un diván", "un sillón", "una mesita", "un televisor", "un ordenador", "un cuadro", "unas cortinas", "una cama", "un armario", "un ropero", "una estantería", "una lámpara", "una bañera", "una ducha", "un lavabo", "un espejo", "una alfombra"];
 const V31_HOME_ARTICLE_MAP={"la casa": "una casa", "el piso": "un piso", "el salón": "un salón", "el comedor": "un comedor", "la cocina": "una cocina", "el dormitorio": "un dormitorio", "el cuarto de baño": "un cuarto de baño", "el estudio": "un estudio", "la entrada": "una entrada", "el pasillo": "un pasillo", "el jardín": "un jardín", "el garaje": "un garaje", "la terraza": "una terraza", "el balcón": "un balcón", "el techo": "un techo", "el lavabo": "un lavabo", "el fregadero": "un fregadero", "el suelo": "un suelo", "la pared": "una pared", "el frigorífico": "un frigorífico", "la cama": "una cama", "la estantería": "una estantería", "el armario": "un armario", "el sillón": "un sillón", "la lavadora": "una lavadora", "la habitación": "una habitación", "la mesa de estudio": "una mesa de estudio", "el ordenador": "un ordenador", "los libros": "unos libros", "los muebles": "unos muebles"};
 const REV21_HOME_ACTIVE_ADDITIONS=["un apartamento", "un piso", "un ascensor"];
 const REV22_HOME_ENSURE_ACTIVE=["un apartamento","un piso","un ascensor"];
@@ -27,7 +28,7 @@ const PRE_V2_TOPICS=['colors','weekdays','months','ser','conversations','school'
 function defaultState(){
   const stats={}; const active={};
   Object.values(TOPICS).forEach(t=>{stats[t.id]={learned:[],correct:0,total:0,streak:0,bestStreak:0,studyIndex:0};active[t.id]=t.words.map(w=>w.es)});
-  if(TOPICS.my_home)active.my_home=V37_HOME_ACTIVE_DEFAULT.filter(word=>TOPICS.my_home.words.some(w=>w.es===word));
+  if(TOPICS.my_home)active.my_home=V39_HOME_ACTIVE_DEFAULT.filter(word=>TOPICS.my_home.words.some(w=>w.es===word));
   return {settings:{rate:.88,autoSpeak:true,voiceURI:'',ruVoiceURI:'',homeNewWordsV38Enabled:true,active,pronunciation:{topics:Object.keys(TOPICS),content:'all'}},stats};
 }
 function loadState(){
@@ -151,7 +152,7 @@ function loadState(){
   }
   if(currentRevision<17){
     if(TOPICS.my_home){
-      s.settings.active.my_home=V37_HOME_ACTIVE_DEFAULT.filter(word=>TOPICS.my_home.words.some(w=>w.es===word));
+      s.settings.active.my_home=V39_HOME_ACTIVE_DEFAULT.filter(word=>TOPICS.my_home.words.some(w=>w.es===word));
       const st=s.stats.my_home;
       if(st&&Array.isArray(st.learned)){
         st.learned=[...new Set(st.learned.map(x=>V31_HOME_ARTICLE_MAP[x]||x).filter(x=>TOPICS.my_home.words.some(w=>w.es===x)))];
@@ -200,6 +201,14 @@ function loadState(){
       });
     }
     s.settings.homeNewWordsV38Enabled=true;
+  }
+  if(currentRevision<23){
+    if(TOPICS.my_home){
+      const arr=s.settings.active.my_home||(s.settings.active.my_home=[]);
+      REV23_HOME_FURNITURE.forEach(word=>{
+        if(TOPICS.my_home.words.some(w=>w.es===word)&&!arr.includes(word))arr.push(word);
+      });
+    }
   }
   if(currentRevision<CONTENT_REVISION)s.contentRevision=CONTENT_REVISION;
   if(localStorage.getItem('coloresState') && !localStorage.getItem(STORAGE)){

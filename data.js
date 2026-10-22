@@ -336,7 +336,7 @@ window.TRAINER_TOPICS = {
     ]
   },
   my_home:{
-    id:'my_home', title:'Мой дом', esTitle:'Mi casa', icon:'🏠', description:'67 карточек · слова учебника и рассказ «Mi casa»', accent:'#d9794f',
+    id:'my_home', title:'Мой дом', esTitle:'Mi casa', icon:'🏠', description:'81 карточка · слова учебника, рассказ «Mi casa» и предметы дома', accent:'#d9794f',
     words:[
       {es:'una casa',ru:'дом',symbol:'🏠'},
       {es:'un piso',ru:'этаж, квартира',symbol:'🏢'},
@@ -366,19 +366,13 @@ window.TRAINER_TOPICS = {
       {es:'¿Cuál es tu habitación favorita?',ru:'Какая твоя любимая комната?',symbol:'❤️',phrase:true},
       {es:'Mi habitación favorita es ...',ru:'Моя любимая комната — ...',symbol:'❤️',phrase:true},
       {es:'un techo',ru:'потолок',symbol:'🏠'},
-      {es:'un lavabo',ru:'раковина',symbol:'🚰'},
       {es:'un fregadero',ru:'кухонная раковина / мойка',symbol:'🚰'},
       {es:'un suelo',ru:'пол',symbol:'⬛'},
       {es:'una pared',ru:'стена',symbol:'🧱'},
       {es:'un frigorífico',ru:'холодильник',symbol:'🧊'},
-      {es:'una cama',ru:'кровать',symbol:'🛏️'},
-      {es:'una estantería',ru:'полка / стеллаж',symbol:'📚'},
-      {es:'un armario',ru:'шкаф',symbol:'🚪'},
-      {es:'un sillón',ru:'кресло',symbol:'🛋️'},
       {es:'una lavadora',ru:'стиральная машина',symbol:'🧺'},
       {es:'una habitación',ru:'комната',symbol:'🚪'},
       {es:'una mesa de estudio',ru:'письменный / рабочий стол',symbol:'🖥️'},
-      {es:'un ordenador',ru:'компьютер',symbol:'💻'},
       {es:'unos libros',ru:'книги',symbol:'📚'},
       {es:'Aquí hay...',ru:'Здесь есть / Здесь находится...',symbol:'📍',phrase:true},
       {es:'Mira mi habitación.',ru:'Посмотри на мою комнату.',symbol:'👀',phrase:true},
@@ -404,7 +398,28 @@ window.TRAINER_TOPICS = {
       {es:'un lavavajillas',ru:'посудомоечная машина',symbol:'🍽️'},
       {es:'un microondas',ru:'микроволновка',symbol:'📻'},
       {es:'un apartamento',ru:'квартира',symbol:'🏢'},
-      {es:'un ascensor',ru:'лифт',symbol:'🛗'}
+      {es:'un ascensor',ru:'лифт',symbol:'🛗'},
+      {es:'una mesa',ru:'стол',symbol:'🪑'},
+      {es:'una silla',ru:'стул',symbol:'🪑'},
+      {es:'un sofá',ru:'диван',symbol:'🛋️'},
+      {es:'un diván',ru:'диван, кушетка',symbol:'🛋️'},
+      {es:'un sillón',ru:'кресло',symbol:'🛋️'},
+      {es:'una mesita',ru:'столик',symbol:'☕'},
+      {es:'un televisor',ru:'телевизор',symbol:'📺'},
+      {es:'un ordenador',ru:'компьютер',symbol:'💻'},
+      {es:'un cuadro',ru:'картина',symbol:'🖼️'},
+      {es:'unas cortinas',ru:'шторы',symbol:'🪟'},
+      {es:'una cama',ru:'кровать',symbol:'🛏️'},
+      {es:'un armario',ru:'шкаф',symbol:'🚪'},
+      {es:'un ropero',ru:'платяной шкаф, шкаф для одежды',symbol:'🚪'},
+      {es:'una estantería',ru:'полка / стеллаж',symbol:'📚'},
+      {es:'una lámpara',ru:'лампа',symbol:'💡'},
+      {es:'una bañera',ru:'ванна',symbol:'🛁'},
+      {es:'una ducha',ru:'душ',symbol:'🚿'},
+      {es:'un lavabo',ru:'раковина в ванной',symbol:'🚰'},
+      {es:'un espejo',ru:'зеркало',symbol:'🪞'},
+      {es:'una alfombra',ru:'ковёр',symbol:'🧶'}
+
     ]
   },
   furniture:{
